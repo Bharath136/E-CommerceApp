@@ -1,0 +1,19 @@
+<div class="cotegory-container">
+    <div class="card  mt-3">
+        <form [formGroup]="regForm" (ngSubmit)="onSubmit()" class="form">
+            <h2 class="heading text-center">Add Category</h2>
+            <div class="form-group mb-2">
+                <label for="category">Category Name</label>
+                <input placeholder="Enter category" type="text" class="form-control" id="category" formControlName="category" required>
+                <div *ngIf="regForm.controls['category'].touched && regForm.controls['category']?.['errors']">
+                    <div *ngIf="regForm.controls['category']?.['errors']?.['required']"
+                        class="error-message text-danger">
+                        Category is required
+                    </div>
+                </div>
+            </div>
+        
+            <button type="submit" class="btn btn-primary mt-4 w-100" [disabled]="regForm.invalid" >Add Category</button>
+        </form>
+    </div>
+</div>

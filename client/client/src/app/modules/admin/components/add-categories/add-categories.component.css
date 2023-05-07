@@ -1,0 +1,11 @@
+.cotegory-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    overflow: auto;
+}
+.card{
+    width: 90%;
+    padding: 40px;
+}

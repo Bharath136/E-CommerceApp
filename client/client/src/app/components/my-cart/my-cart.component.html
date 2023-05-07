@@ -1,0 +1,16 @@
+<div class="cartlist-container">
+    <ul class="cart-list mt-4" *ngFor="let item of cartList">
+        <li class="cart-item">
+            <div class="cart-details w-100">
+                <img src="{{item.image}}" alt="{{item.productname}}" class="image">
+                <div class="ml-2">
+                    <h3>{{item.productname}}</h3>
+                    <p>Price: {{item.price}}</p>
+                </div>
+            </div>
+            <div>
+                <i class="fa fa-times mr-4"></i>
+            </div>
+        </li>
+    </ul>
+</div>

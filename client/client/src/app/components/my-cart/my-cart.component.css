@@ -1,0 +1,29 @@
+.cartlist-container{
+    height: 90vh;
+    overflow: auto;
+}
+.cart-list{
+    width: 100%;
+    list-style-type: none;
+    padding: 20px;
+}
+.cart-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+    cursor: pointer;
+}
+.cart-item:hover {
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+  }
+.cart-details{
+    display: flex;
+    align-items: center;
+}
+.image{
+    width: 10%;
+}
