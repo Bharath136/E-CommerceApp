@@ -1,8 +1,14 @@
 .registration-container{
-    height: 100vh;
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
+}
+@media screen and (max-width:768px) {
+    .registration-container{
+        align-items: flex-start;
+    }
 }
 
 

@@ -17,10 +17,10 @@ export class AddCategoriesComponent {
     })
    }
 
-   onSubmit(details={firstname:String,lastname:String,username:String, email:String,password:String}): void {
-    this.http.post('http://localhost:5100/register',details).subscribe((response) => {
-      window.alert("Register Successfully!")
-      this.route.navigate(['/login'])
+   onSubmit(details={category:String}): void {
+    this.http.post('http://localhost:5100/add-category',details).subscribe((response) => {
+      window.alert("Category Added Successfully!")
+      this.regForm.reset();
     })
   }
 }

@@ -41,8 +41,14 @@
     }
 }
 
+.update-card{
+    border: 1px solid grey;
+}
+
 .card:hover {
     transform: scale(1.02);
     transition: all 0.3s ease;
   }
 
+
+  

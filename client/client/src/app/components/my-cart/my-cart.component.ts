@@ -16,7 +16,12 @@ export class MyCartComponent {
       this.cartList = data;
       console.log(this.cartList); // logging data here to show it's available in the component
     });
-    console.log(this.cartList)
+  }
+
+  onRemove(id: string): void {
+    this.http.delete(`http://localhost:5100/cart/${id}`).subscribe(() => {
+      console.log('Item removed from cart.');
+    });
   }
 
 }

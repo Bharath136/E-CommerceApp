@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  public isUser = false 
+  public isAdmin = false
 
+  constructor(){
+    const token = localStorage.getItem('jwtToken')
+    if(token){
+      this.isUser
+    }
+  }
 }

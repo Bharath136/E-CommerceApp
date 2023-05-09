@@ -12,6 +12,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MyCartComponent } from './components/my-cart/my-cart.component';
+import { UpdateProductComponent } from './modules/admin/components/update-product/update-product.component';
+import { OrdersComponent } from './modules/admin/components/orders/orders.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { PlaceOrderComponent } from './components/place-order/place-order.component';
 
 
 @NgModule({
@@ -22,7 +26,11 @@ import { MyCartComponent } from './components/my-cart/my-cart.component';
     NotFoundComponent,
     LandingPageComponent,
     HeaderComponent,
-    MyCartComponent
+    MyCartComponent,
+    UpdateProductComponent,
+    OrdersComponent,
+    ProductDetailsComponent,
+    PlaceOrderComponent
   ],
   imports: [
     BrowserModule,

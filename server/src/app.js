@@ -16,7 +16,6 @@ app.use(cors());
 
 // admin middelware
 function adminAuthenticateToken(req, res, next) {
-    console.log("Hello")
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) return res.status(401).send('Unauthorized');
@@ -34,7 +33,6 @@ const userAuthenticateToken = async (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader.split(" ")[1]
-        console.log(authHeader)
         if (!token) {
             res.status(401);
             return res.send('Invalid JWT Token');
@@ -54,10 +52,9 @@ const userAuthenticateToken = async (req, res, next) => {
 
 // Add a new category to the database
 // API endpoint to add a category
-app.post('/add-category', adminAuthenticateToken, async (req, res) => {
+app.post('/add-category', async (req, res) => {
     try {
         const { category, description } = req.body;
-        console.log(category)
 
         // Validate inputs
         if (!category) {
@@ -118,7 +115,7 @@ app.get('/api/categories', async (req, res) => {
 app.post('/add-products', async (req, res) => {
     try {
         const { productname, description, price, brand, image, category, countInStock, rating, quantity } = req.body;
-        console.log(req.body);
+        
         if (!productname || !description || !price || !brand || !image || !category || !countInStock || !rating) {
             return res.status(400).send({ message: 'Missing required fields' });
         }
@@ -150,9 +147,8 @@ app.post('/add-products', async (req, res) => {
 
 
 // Endpoint for adding an item to the cart
-app.post('/api/add-to-cart', userAuthenticateToken, async (req, res) => {
+app.post('/add-to-cart', async (req, res) => {
     const { productId, quantity } = req.body;
-
     // Validate the input data against the schema
     const item = new models.AddToCart({ productId, quantity });
     const validationError = item.validateSync();
@@ -171,20 +167,23 @@ app.post('/api/add-to-cart', userAuthenticateToken, async (req, res) => {
     }
 });
 
-app.delete('/api/delete-from-cart/:id', async (req, res) => {
+app.delete('/cart/:id', async (req, res) => {
     try {
         const deletedItem = await models.AddToCart.findByIdAndDelete(req.params.id);
         if (!deletedItem) {
             return res.status(404).send('Item not found');
         }
-        res.send(`Deleted item ${itemId} from cart`);
+        res.send(`Deleted item ${req.params.id} from cart`);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal server error');
     }
 });
 
-app.delete('/api/delete-cart-items', async (req, res) => {
+
+
+
+app.delete('/cart-items', async (req, res) => {
     try {
         await models.AddToCart.deleteMany({});
         res.send('All cart items deleted');
@@ -211,6 +210,7 @@ app.get('/cart', async (req, res) => {
 
 // Create a new order
 app.post('/order', async (req, res) => {
+    console.log(req.body)
     const order = new models.Order({
         user: req.body.user,
         phone: req.body.phone,
@@ -240,10 +240,23 @@ app.get('/orders', async (req, res) => {
     }
 });
 
+app.patch('/orders/:id', async (req, res) => {
+    try {
+      const order = await models.Order.findById(req.params.id);
+      if (req.body.status) {
+        order.status = req.body.status;
+      }
+      await order.save();
+      res.json(order);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
 
 
 // Manage order (admin only)
-app.put('/order/:id', adminAuthenticateToken, async (req, res) => {
+app.put('/order/:id', async (req, res) => {
     try {
         const orderId = req.params.id;
         const order = await models.Order.findById(orderId);
@@ -253,7 +266,6 @@ app.put('/order/:id', adminAuthenticateToken, async (req, res) => {
         Object.keys(req.body).forEach(key => {
             order[key] = req.body[key];
         });
-
         const updatedOrder = await order.save();
         res.send(updatedOrder);
     } catch (error) {
@@ -261,6 +273,18 @@ app.put('/order/:id', adminAuthenticateToken, async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+app.get('/orders/:id', async (req, res) => {
+    try {
+      const order = await models.Order.findById(req.params.id);
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+      res.json(order);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
 
 
 
@@ -464,7 +488,6 @@ app.delete('/api/user/:id', async (req, res) => {
 
 
 // Get Products
-
 // Define a function to query the database for all products
 const getAllProducts = async () => {
     try {
@@ -484,7 +507,7 @@ app.get('/products', async (req, res) => {
 
 
 // Get a single product
-app.get('/api/products/:id', async (req, res) => {
+app.get('/products/:id', async (req, res) => {
     try {
         const product = await models.Product.findById(req.params.id);
         if (!product) {
@@ -497,7 +520,7 @@ app.get('/api/products/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/products/:id', adminAuthenticateToken, async (req, res) => {
+app.delete('/products/:id', async (req, res) => {
     try {
         const deletedProduct = await models.Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
@@ -510,9 +533,11 @@ app.delete('/api/products/:id', adminAuthenticateToken, async (req, res) => {
     }
 });
 
-app.put('/api/products/:id', adminAuthenticateToken, async (req, res) => {
+app.put('/products/:id', async (req, res) => {
+    console.log(req.params.id)
     try {
         const updatedProduct = await models.Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        console.log(updatedProduct)
         if (!updatedProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
@@ -523,6 +548,8 @@ app.put('/api/products/:id', adminAuthenticateToken, async (req, res) => {
     }
 });
 
+
+  
 
 
 app.listen(port, () => {

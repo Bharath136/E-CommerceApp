@@ -1,8 +1,8 @@
 <div class="add-product-container">
     <div class="card">
-        <form [formGroup]="regForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)">
             <h2 class="heading text-center">Add Products</h2>
-            <div class="add-product-form-container ">
+            <div class="add-product-form-container row">
                 <div class="col-6 col-12 col-md-6 ">
                     <div class="form-group mb-2">
                         <label for="productname">Productname</label>

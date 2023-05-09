@@ -1,6 +1,6 @@
 <div class="cotegory-container">
     <div class="card  mt-3">
-        <form [formGroup]="regForm" (ngSubmit)="onSubmit()" class="form">
+        <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)"class="form">
             <h2 class="heading text-center">Add Category</h2>
             <div class="form-group mb-2">
                 <label for="category">Category Name</label>
