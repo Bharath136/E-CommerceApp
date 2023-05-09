@@ -9,8 +9,6 @@
                 <p>{{ product?.description }}</p>
                 <h2>Price: {{ product?.price }}/-</h2>
             </div>
-            <!-- <button (click)="buyNow(product._id)" class="btn btn-warning w-100">Buy Now</button>
-         -->
             <div class="buttons-container"><button class="btn btn-warning w-50" routerLink="/place-order/{{product?._id}}">Buy Now</button>
                 <button (click)="onAddToCart(product?._id)" class="btn btn-primary w-50">Add To Cart</button>
             </div>

@@ -23,6 +23,11 @@ export class AddProductsComponent {
       countInStock: new FormControl(null, Validators.required),
       rating: new FormControl(null, Validators.required),
     })
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (!jwtToken){
+      window.alert("You can't Access this!")
+      this.route.navigate(['/login'])
+    }
 
   }
 

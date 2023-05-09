@@ -21,10 +21,14 @@ export class RegisterComponent {
     })
    }
 
-   onSubmit(details={firstname:String,lastname:String,username:String, email:String,password:String}): void {
-    this.http.post('http://localhost:5100/register',details).subscribe((response) => {
-      window.alert("Register Successfully!")
-      this.route.navigate(['/login'])
-    })
-  }
+   onSubmit(details: { firstname: string, lastname: string, username: string, email: string, password: string }): void {
+    this.http.post('http://localhost:5100/register', details).subscribe((response) => {
+        window.alert('Registered Successfully!');
+        this.route.navigate(['/login']);
+    }, error => {
+        window.alert('Registration Failed!');
+        console.log(error);
+    });
+}
+
 }

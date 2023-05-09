@@ -15,6 +15,11 @@ export class AddCategoriesComponent {
     this.regForm  = new FormGroup({
       category:new FormControl(null,Validators.required),
     })
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (!jwtToken){
+      window.alert("You can't Access this!")
+      this.route.navigate(['/login'])
+    }
    }
 
    onSubmit(details={category:String}): void {

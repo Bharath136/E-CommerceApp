@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,8 +13,14 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    private router:Router
+  ) { 
+    const token = localStorage.getItem("jwtToken")
+    if (!token) {
+      this.router.navigate(['/login'])
+    }
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -25,11 +31,17 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
-  onAddToCart(productId:string):void {
-    this.http.post('http://localhost:5100/add-to-cart',{"productId":productId}).subscribe((res) => {
-      if(res){
-        window.alert("Product Added to cart!")
+  onAddToCart(productId: string): void {
+    console.log(productId);
+    this.http.post('http://localhost:5100/add-to-cart', {productId}).subscribe(
+      (response) => {
+        console.log(response);
+        window.alert('Product added to cart!');
+      },
+      (error) => {
+        console.error(error);
+        window.alert('Error occurred while adding the product to cart!');
       }
-    })
+    );
   }
 }

@@ -1,16 +1,17 @@
 <div class="cartlist-container">
     <h1 class="ml-4 mt-4">My Cart</h1>
     <ul class="cart-list mt-4" *ngFor="let item of cartList">
-        <li class="cart-item">
+        <li class="cart-item" >
             <div class="cart-details w-100">
-                <img src="{{item.image}}" alt="{{item.productname}}" class="image">
+                <img src="{{item.image}}" alt="{{item.productname}}" class="image" routerLink="/product-details/{{item._id}}">
                 <div class="ml-2">
                     <h3>{{item.productname}}</h3>
                     <p>Price: {{item.price}} /-</p>
+                    <button class="btn btn-primary" routerLink="/place-order/{{item._id}}">Buy this product</button>
                 </div>
             </div>
             <div>
-                <button type="button" (click)="onRemove(item._id)" class="btn"><i class="fa fa-times mr-4"></i></button>
+                <button type="button" (click)="onRemove(item._id)" class="btn"><i class="fa fa-times"></i></button>
             </div>
         </li>
     </ul>

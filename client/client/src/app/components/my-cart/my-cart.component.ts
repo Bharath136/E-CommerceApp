@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-cart',
@@ -8,20 +9,33 @@ import { Component } from '@angular/core';
 })
 export class MyCartComponent {
   public cartList: any[] = [];
-  public searchText: string;
 
-  constructor(private http: HttpClient) {
-    this.searchText = '';
+  constructor(private http: HttpClient,private route:Router) {
     this.http.get<any[]>('http://localhost:5100/cart').subscribe(data => {
       this.cartList = data;
-      console.log(this.cartList); // logging data here to show it's available in the component
     });
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken){
+      this.route.navigate(['/admin/home'])
+    }
+    const token = localStorage.getItem("jwtToken")
+    if (!token) {
+      window.alert("You can't Access this!")
+      this.route.navigate(['/login'])
+    }
+    
   }
 
   onRemove(id: string): void {
-    this.http.delete(`http://localhost:5100/cart/${id}`).subscribe(() => {
-      console.log('Item removed from cart.');
+    console.log(id)
+    this.http.delete(`http://localhost:5100/remove-from-cart/${id}`).subscribe((res) => {
+      window.alert('Item removed from cart.')
+      this.http.get<any[]>('http://localhost:5100/cart').subscribe(data => {
+      this.cartList = data; 
     });
+    });
+    
   }
+  
 
 }

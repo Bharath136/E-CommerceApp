@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup, FormControl,Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,18 +11,40 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   regForm: FormGroup;
 
-  constructor(private http: HttpClient, private route:Router) {
-    this.regForm  = new FormGroup({
-      email:new FormControl(null,Validators.required),
-      password:new FormControl(null,Validators.required),
+  constructor(private http: HttpClient, private route: Router) {
+    this.regForm = new FormGroup({
+      email: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
     })
-   }
-
-  onSubmit(details={email:String,password:String}): void {
-    this.http.post('http://localhost:5100/login',details).subscribe((response) => {
-      window.alert("Login Successfully!")
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken){
+      this.route.navigate(['/admin/home'])
+    }
+    const token = localStorage.getItem("jwtToken")
+    if (token) {
       this.route.navigate(['/home'])
-    })
+    }
   }
+
+  onSubmit(details = { email: String, password: String }): void {
+    this.http.post('http://localhost:5100/login', details).subscribe(
+      (response: any) => {
+        if (response && response.token) {
+          window.alert('User Login Successfully!');
+          this.route.navigate(['/home']);
+          localStorage.setItem('jwtToken', response.token);
+        } else {
+          this.route.navigate(['/admin/home']);
+          localStorage.setItem('adminJwtToken', response.jwtTtoken);
+          window.alert('Admin Login Successfully!');
+        }
+      },
+      (error) => {
+        console.error(error);
+        window.alert('Login failed!');
+      }
+    );
+  }
+
 
 }

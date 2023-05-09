@@ -34,6 +34,11 @@ export class HomeComponent {
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
     });
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (!jwtToken){
+      window.alert("You can't Access this!")
+      this.route.navigate(['/login'])
+    }
   }
 
   filterData() {

@@ -24,12 +24,17 @@ export class LandingPageComponent {
       phone: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
-      paymentMethod: new FormControl(null,Validators.required)
+      paymentMethod: new FormControl(null, Validators.required)
     })
     this.searchText = '';
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
     });
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken){
+      window.alert("You can't Access this!")
+      this.route.navigate(['/admin/home'])
+    }
   }
 
   filterData() {
@@ -42,31 +47,46 @@ export class LandingPageComponent {
     }
   }
 
-  onAddToCart(productId:string):void {
-    this.http.post('http://localhost:5100/add-to-cart',{"productId":productId}).subscribe((res) => {
-      if(res){
-        window.alert("Product Added to cart!")
-        console.log(res)
-      }
-    })
+  onAddToCart(productId: string): void {
+    const token = localStorage.getItem("jwtToken")
+    if (!token) {
+      this.route.navigate(['/login'])
+    } else {
+      this.http.post('http://localhost:5100/add-to-cart', { productId }).subscribe(
+        (response) => {
+          window.alert('Product added to cart!');
+        },
+        (error) => {
+          console.error(error);
+          window.alert('Error occurred while adding the product to cart!');
+        }
+      );
+    }
+
   }
 
-  onBuyNow(orderDetails = { user: String, phone: String, productId: this.itemId, address1: String, address2: String}): void {
-    console.log(this.itemId);
-    const order = {
-      user: orderDetails.user,
-      phone: orderDetails.phone,
-      productId: this.itemId,
-      address1: orderDetails.address1,
-      address2: orderDetails.address2
-    };
-    this.http.post(`http://localhost:5100/order`, order).subscribe((res) => {
-      if (res) {
-        window.alert("Product Placed Successfully!");
-        this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
-          this.data = data;
-        });
-      }
-    });
+
+
+  onBuyNow(orderDetails = { user: String, phone: String, productId: this.itemId, address1: String, address2: String }): void {
+    const token = localStorage.getItem("jwtToken")
+    if (!token) {
+      this.route.navigate(['/login'])
+    } else {
+      const order = {
+        user: orderDetails.user,
+        phone: orderDetails.phone,
+        productId: this.itemId,
+        address1: orderDetails.address1,
+        address2: orderDetails.address2
+      };
+      this.http.post(`http://localhost:5100/order`, order).subscribe((res) => {
+        if (res) {
+          window.alert("Product Placed Successfully!");
+          this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
+            this.data = data;
+          });
+        }
+      });
+    }
   }
 }

@@ -5,8 +5,7 @@ const userSchema = new mongoose.Schema({
     lastname: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    user: {type: String, required: true}
+    password: { type: String, required: true }
 });
 
 const adminSchema = new mongoose.Schema({
@@ -43,16 +42,21 @@ const addToCartSchema = new mongoose.Schema({
 const orderSchema = new mongoose.Schema({ 
     user: { type: String , ref: 'User', required: true },
     phone: {type: String, required:true},
-    // products: [{
-    //     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-    //     quantity: { type: Number, required: true }
-    // }],
-    productId: {type:String, required:true},
+    products: [{
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+        quantity: { type: Number,default: 1 }
+    }],
     status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered'], default: 'Pending' },
-    createdAt: { type: Date, default: Date.now },
-    address1: { type: String, require: true },
-    address2: { type: String, require: true }
+    address: { type: String, require: true },
+    createdAt: { type: Date, default: Date.now }
 });
+// const orderSchema = new mongoose.Schema({ 
+//     user: { type: String , ref: 'User', required: true },
+//     phone: { type: String, required: true },
+//     productId: { type: String, required: true },
+//     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+//     address: { type: String, required: true }
+// });
  
 
 const paymentSchema = new mongoose.Schema({

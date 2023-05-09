@@ -17,6 +17,12 @@ export class PlaceOrderComponent {
   regForm: FormGroup;
 
   constructor(private http: HttpClient, private route: Router, private activatedRoute: ActivatedRoute) {
+    
+    const token = localStorage.getItem("jwtToken")
+    if (!token) {
+      window.alert("You can't Access this!")
+      this.route.navigate(['/login'])
+    }
     this.routerId = '';
     const idParam = this.activatedRoute.snapshot.paramMap.get('id');
     if (idParam) {
@@ -58,14 +64,29 @@ export class PlaceOrderComponent {
 
   createOrder(orderDetails = { user: String, phone: String, productId: this.routerId, address1: String, address2: String }): void {
     console.log(this.routerId);
-    const order = {
+    const order1 = {
       user: orderDetails.user,
       phone: orderDetails.phone,
       productId: this.routerId,
       address1: orderDetails.address1,
       address2: orderDetails.address2
     };
-    this.http.post(`http://localhost:5100/order`, order).subscribe((res) => {
+    const order = {
+      "user": "Ravi",
+      "phone": "9876543210",
+      "products": [
+        {
+          "product": "60c8e2a184b31a282450f0cc",
+          "quantity": 2
+        },
+        {
+          "product": "60c8e2a184b31a282450f0cd",
+          "quantity": 1
+        }
+      ],
+      "address": "123 Main St"
+    }
+    this.http.post(`http://localhost:5100/orders`, order).subscribe((res) => {
       if (res) {
         window.alert("Product Placed Successfully!");
         this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {

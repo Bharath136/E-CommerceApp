@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light d-flex flex-row justify-content-between" *ngIf="!isUser">
+<nav class="navbar navbar-expand-lg navbar-light d-flex flex-row justify-content-between" *ngIf="!isAdmin">
   <a class="navbar-brand" routerLink="/home" style="font-weight: bold;">E-COMM</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -18,7 +18,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" routerLink="/login">SignIn/SignUp</a>
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item"(click)="onLogout()">Logout</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
@@ -58,7 +58,7 @@
           Profile
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item" (click)="onLogout()">Logout</a>
           
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>

@@ -115,7 +115,7 @@ app.get('/api/categories', async (req, res) => {
 app.post('/add-products', async (req, res) => {
     try {
         const { productname, description, price, brand, image, category, countInStock, rating, quantity } = req.body;
-        
+
         if (!productname || !description || !price || !brand || !image || !category || !countInStock || !rating) {
             return res.status(400).send({ message: 'Missing required fields' });
         }
@@ -148,37 +148,34 @@ app.post('/add-products', async (req, res) => {
 
 // Endpoint for adding an item to the cart
 app.post('/add-to-cart', async (req, res) => {
-    const { productId, quantity } = req.body;
-    // Validate the input data against the schema
+    const { productId, quantity = 1 } = req.body;
     const item = new models.AddToCart({ productId, quantity });
-    const validationError = item.validateSync();
-
-    if (validationError) {
-        return res.status(400).send(validationError.message);
-    }
-
     try {
-        // Save the new cart item to the database
         await item.save();
-        res.send(`Added ${quantity} of product ${productId} to cart`);
+        res.status(200).json({ message: `Added ${quantity} of product ${productId} to cart` });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
-app.delete('/cart/:id', async (req, res) => {
+
+app.delete('/remove-from-cart/:id', async (req, res) => {
+    const id = req.params.id;
     try {
-        const deletedItem = await models.AddToCart.findByIdAndDelete(req.params.id);
-        if (!deletedItem) {
-            return res.status(404).send('Item not found');
+        const result = await models.AddToCart.deleteOne({ productId : id });
+        if (result.deletedCount === 0) {
+            res.status(404).json({ message: `Product with id ${id} not found in the cart` });
+        } else {
+            res.status(200).json({ message: `Removed product with id ${id} from cart` });
         }
-        res.send(`Deleted item ${req.params.id} from cart`);
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal server error');
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
 
 
 
@@ -215,8 +212,8 @@ app.post('/order', async (req, res) => {
         user: req.body.user,
         phone: req.body.phone,
         productId: req.body.productId,
-        address1: req.body.address1,
-        address2: req.body.address2
+        product:await models.Product.findById(productId),
+        address: req.body.address
     });
 
     try {
@@ -226,6 +223,26 @@ app.post('/order', async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+// app.post('/orders', (req, res, next) => {
+//     const order = new models.Order({
+//         user: req.body.user,
+//         phone: req.body.phone,
+//         products: req.body.products,
+//         status: req.body.status,
+//         address: req.body.address,
+//         createdAt: req.body.createdAt
+//     });
+//     order.save()
+//     .then(result => {
+//         console.log(result);
+//         res.status(201).json({ message: "Order created successfully", order: result });
+//     })
+//     .catch(err => {
+//         console.log(err);
+//         res.status(500).json({ error: err });
+//     });
+// });
+
 
 
 app.get('/orders', async (req, res) => {
@@ -242,16 +259,16 @@ app.get('/orders', async (req, res) => {
 
 app.patch('/orders/:id', async (req, res) => {
     try {
-      const order = await models.Order.findById(req.params.id);
-      if (req.body.status) {
-        order.status = req.body.status;
-      }
-      await order.save();
-      res.json(order);
+        const order = await models.Order.findById(req.params.id);
+        if (req.body.status) {
+            order.status = req.body.status;
+        }
+        await order.save();
+        res.json(order);
     } catch (err) {
-      res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
-  });
+});
 
 
 
@@ -276,15 +293,15 @@ app.put('/order/:id', async (req, res) => {
 
 app.get('/orders/:id', async (req, res) => {
     try {
-      const order = await models.Order.findById(req.params.id);
-      if (!order) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
-      res.json(order);
+        const order = await models.Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json(order);
     } catch (err) {
-      res.status(400).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
-  });
+});
 
 
 
@@ -376,18 +393,44 @@ app.post('/api/register', async (request, response) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
+  
+    // Find the user by email in the database
     const user = await models.Users.findOne({ email });
+ 
+  
+    // If the user doesn't exist, return an error
     if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+
+    const isAdmin = email=='virat@gmail.com' && password == 'virat@1234';
+  
+    // Compare the password with the hashed password in the database
+    const isMatch = await bcrypt.compare(password, user.password);
+  
+    // If the password doesn't match, return an error
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-    const token = jwt.sign({ userId: user._id }, 'secret_key');
-    res.cookie('token', token, { httpOnly: true });
-    res.json({ user });
-});
+  
+
+    
+
+   
+    // Generate a JWT token
+    if(!isAdmin){
+        const token = jwt.sign({ userId: user._id }, 'mysecretkey');
+        res.json({ token });
+    }else{
+        const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey');
+        res.json({ jwtToken });
+        console.log(jwtToken)
+    }
+    
+  
+    // Return the token
+    
+  });
 
 
 
@@ -395,36 +438,34 @@ app.post('/login', async (req, res) => {
 // user schema
 app.post('/register', async (req, res) => {
     try {
-      const { firstname, lastname, username, email, password } = req.body;
-      const user = await models.Users.findOne({ email });
-  
-      if (user) {
-        return res.status(400).send('Email already exists');
-      }
-  
-      // Hash the password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      // Create a new user object
-      const newUser = new models.Users({
-        firstname,
-        lastname,
-        username,
-        email,
-        password: hashedPassword,
-      });
-  
-      // Save the new user to the database
-      const userCreated = await newUser.save();
-      console.log(userCreated, 'user created');
-      return res.status(201).send('Successfully Registered');
+        const { firstname, lastname, username, email, password } = req.body;
+        const user = await models.Users.findOne({ email });
+        
+        if (user) {
+            return res.status(400).send('User already exists');
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create a new user object
+        const newUser = new models.Users({
+            firstname,
+            lastname,
+            username,
+            email,
+            password: hashedPassword
+        });
+
+        // Save the new user to the database
+        const userCreated = await newUser.save();
+        console.log(userCreated, 'user created');
+        return res.status(201).send('Successfully Registered');
     } catch (error) {
-      console.log(error);
-      return res.status(500).send('Server Error');
+        console.log(error);
+        return res.status(500).send('Server Error');
     }
-  });
-  
+});
+
 
 
 
@@ -549,7 +590,7 @@ app.put('/products/:id', async (req, res) => {
 });
 
 
-  
+
 
 
 app.listen(port, () => {
