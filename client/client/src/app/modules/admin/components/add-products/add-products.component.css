@@ -35,3 +35,11 @@
     font-family: "Bree Serif";
     font-size: 26px;
 }
+
+
+.loader-container{
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

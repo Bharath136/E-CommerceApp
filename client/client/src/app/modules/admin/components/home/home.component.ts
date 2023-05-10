@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,27 +11,17 @@ export class HomeComponent {
   public data: any[] = [];
   public searchText: string;
   public isUpdate = false;
-  public itemId: string;
+  public isLoading = false;
 
-  regForm: FormGroup;
+
 
   constructor(private http: HttpClient, private route: Router) {
-    this.itemId = ''
-    this.regForm = new FormGroup({
-      productname: new FormControl(null, Validators.required),
-      description: new FormControl(null, Validators.required),
-      price: new FormControl(null, Validators.required),
-      brand: new FormControl(null, Validators.required),
-      image: new FormControl(null, Validators.required),
-      quantity: new FormControl(null, Validators.required),
-      category: new FormControl(null, Validators.required),
-      countInStock: new FormControl(null, Validators.required),
-      rating: new FormControl(null, Validators.required),
-      
-    })
+    this.isLoading = true;
+    
     this.searchText = '';
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
+      this.isLoading = false;
     });
     const jwtToken = localStorage.getItem('adminJwtToken')
     if (!jwtToken){
@@ -51,31 +40,16 @@ export class HomeComponent {
     }
   }
 
-  onUpdate(productDetails = { productName: String, description: String, price: String, brand: String, image: String, category: String, countInStock: String, rating: String }): void {
-    console.log(this.itemId)
-    this.http.put(`http://localhost:5100/products/${this.itemId}`, productDetails).subscribe((res) => {
-      if (res) {
-        window.alert("Product Updated Successfully!")
-        this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
-          this.data = data;
-          this.isUpdate = false
-        });
-      }
-    })
-  }
 
-
-  onEdit(productId: string) {
-    this.isUpdate = true
-    this.itemId = productId
-  }
 
   onDelete(productId: string): void {
+    // this.isLoading = true;
     this.http.delete(`http://localhost:5100/products/${productId}`).subscribe((res) => {
       if (res) {
         window.alert("Product Deleted Successfully!")
         this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
           this.data = data;
+          // this.isLoading = false;
         });
       }
     })

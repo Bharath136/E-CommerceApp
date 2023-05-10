@@ -1,4 +1,7 @@
-<div class="cotegory-container">
+<div class="loader-container w-100" *ngIf="isLoading">
+    <app-loader-spinner></app-loader-spinner>
+</div>
+<div class="cotegory-container" *ngIf="!isLoading">
     <div class="card  mt-3">
         <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)"class="form">
             <h2 class="heading text-center">Add Category</h2>

@@ -10,25 +10,31 @@ import { HttpClient } from '@angular/common/http';
 export class ProductDetailsComponent implements OnInit {
 
   public product: any;
+  public isLoading = false
 
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
     private router:Router
   ) { 
+    
     const token = localStorage.getItem("jwtToken")
     if (!token) {
+      window.alert("You can't Access this! because your not an loggedin user!")
       this.router.navigate(['/login'])
     }
   }
 
   ngOnInit() {
+    this.isLoading = true
     this.route.paramMap.subscribe(params => {
       const productId = params.get('id');
       this.http.get(`http://localhost:5100/products/${productId}`).subscribe(product => {
         this.product = product;
+        this.isLoading = false
       });
     });
+    
   }
 
   onAddToCart(productId: string): void {

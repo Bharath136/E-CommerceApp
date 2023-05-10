@@ -13,14 +13,19 @@ export class PlaceOrderComponent {
   public searchText: string;
   public routerId: string;
   public product: any = {};
+  public isLoading = false;
+  public isSuccess = false;
 
   regForm: FormGroup;
 
   constructor(private http: HttpClient, private route: Router, private activatedRoute: ActivatedRoute) {
-    
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken) {
+      this.route.navigate(['/admin/home'])
+    }
     const token = localStorage.getItem("jwtToken")
     if (!token) {
-      window.alert("You can't Access this!")
+      window.alert("You can't Access this! because your not an loggedin user!")
       this.route.navigate(['/login'])
     }
     this.routerId = '';
@@ -41,58 +46,59 @@ export class PlaceOrderComponent {
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
     });
+
   }
 
   filterData() {
+    this.isLoading = true;
     if (this.searchText) {
+      this.isLoading = false;
       return this.data.filter((product) =>
         product.productname.toLowerCase().includes(this.searchText.toLowerCase())
       );
     } else {
+      this.isLoading = false;
       return this.data;
     }
   }
 
 
   onAddToCart(productId: string): void {
+    this.isLoading = true;
     this.http.post('http://localhost:5100/add-to-cart', { "productId": productId }).subscribe((res) => {
       if (res) {
         window.alert("Product Added to cart!")
+        this.isLoading = false;
+      }else{
+        this.isLoading = false;
       }
     })
   }
 
-  createOrder(orderDetails = { user: String, phone: String, productId: this.routerId, address1: String, address2: String }): void {
-    console.log(this.routerId);
-    const order1 = {
+  createOrder(orderDetails = { user: String, phone: String, productId: this.routerId, address: String, quantity: String, paymentMethod: String }): void {
+    this.isLoading = true;
+    const order = {
       user: orderDetails.user,
       phone: orderDetails.phone,
       productId: this.routerId,
-      address1: orderDetails.address1,
-      address2: orderDetails.address2
+      quantity: orderDetails.quantity,
+      address: orderDetails.address,
+      paymentMethod: orderDetails.paymentMethod
     };
-    const order = {
-      "user": "Ravi",
-      "phone": "9876543210",
-      "products": [
-        {
-          "product": "60c8e2a184b31a282450f0cc",
-          "quantity": 2
-        },
-        {
-          "product": "60c8e2a184b31a282450f0cd",
-          "quantity": 1
-        }
-      ],
-      "address": "123 Main St"
-    }
-    this.http.post(`http://localhost:5100/orders`, order).subscribe((res) => {
-      if (res) {
-        window.alert("Product Placed Successfully!");
-        this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
-          this.data = data;
-        });
-      }
+    console.log(order)
+    this.http.post('http://localhost:5100/orders',order).subscribe((response) => {
+      window.alert("Order Created Successfully!")
+      this.isLoading = false;
+      this.isSuccess = true
+      this.regForm.reset()
+    }, (error) => {
+      window.alert("Failed to Create Order!")
+      console.log(error);
+      this.isLoading = false;
     });
+  }
+
+  onContinue(){
+    this.isSuccess = false
   }
 }

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AddCategoriesComponent {
   regForm: FormGroup;
+  public isLoading = false;
 
   constructor(private http:HttpClient, private route:Router) {
     this.regForm  = new FormGroup({
@@ -23,9 +24,11 @@ export class AddCategoriesComponent {
    }
 
    onSubmit(details={category:String}): void {
+    this.isLoading = true;
     this.http.post('http://localhost:5100/add-category',details).subscribe((response) => {
       window.alert("Category Added Successfully!")
       this.regForm.reset();
+      this.isLoading = false;
     })
   }
 }

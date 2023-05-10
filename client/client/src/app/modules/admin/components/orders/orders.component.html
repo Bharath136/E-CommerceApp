@@ -1,4 +1,7 @@
-<div class="container">
+<div class="loader-container w-100" *ngIf="isLoading">
+  <app-loader-spinner></app-loader-spinner>
+</div>
+<div class="container" *ngIf="!isLoading">
   <div class="row">
     <div class="col-md-12">
       <div class="table-responsive">
@@ -10,6 +13,7 @@
               <th>Name</th>
               <th>Contact</th>
               <th>Status</th>
+              <th>Payment Method</th>
               <th>Date</th>
             </tr>
           </thead>
@@ -20,6 +24,7 @@
               <td>{{item.user}}</td>
               <td>{{item.phone}}</td>
               <td>{{item.status}}</td>
+              <td>{{item.paymentMethod}}</td>
               <td>{{item.createdAt }}</td>
               <!-- <td>{{ datePipe.transform(item.createdAt, 'yyyy-MM-dd HH:mm:ss') }}</td> -->
             </tr>

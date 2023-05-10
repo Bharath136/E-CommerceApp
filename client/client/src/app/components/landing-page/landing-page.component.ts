@@ -13,10 +13,12 @@ export class LandingPageComponent {
   public searchText: string;
   public itemId: string;
   public product: any = {};
+  public isLoading = false;
 
   regForm: FormGroup;
 
   constructor(private http: HttpClient, private route: Router) {
+    this.isLoading = true;
     this.itemId = ''
     this.product = {}
     this.regForm = new FormGroup({
@@ -29,6 +31,7 @@ export class LandingPageComponent {
     this.searchText = '';
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
+      this.isLoading = false
     });
     const jwtToken = localStorage.getItem('adminJwtToken')
     if (jwtToken){
@@ -49,7 +52,11 @@ export class LandingPageComponent {
 
   onAddToCart(productId: string): void {
     const token = localStorage.getItem("jwtToken")
-    if (!token) {
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken){
+      this.route.navigate(['/admin/home'])
+    }if (!token) {
+      window.alert("You can't Access this! because your not an loggedin user!")
       this.route.navigate(['/login'])
     } else {
       this.http.post('http://localhost:5100/add-to-cart', { productId }).subscribe(
@@ -62,6 +69,8 @@ export class LandingPageComponent {
         }
       );
     }
+    
+    
 
   }
 

@@ -6,6 +6,7 @@ import { AddProductsComponent } from './components/add-products/add-products.com
 import { AddCategoriesComponent } from './components/add-categories/add-categories.component';
 import { UpdateProductComponent } from './components/update-product/update-product.component';
 import { OrdersComponent } from './components/orders/orders.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
 
 
 const routes: Routes = [
@@ -22,10 +23,13 @@ const routes: Routes = [
         path: 'add-categories', component: AddCategoriesComponent
       },
       {
-        path: 'update-product', component: UpdateProductComponent
+        path: 'update-product/:id', component: UpdateProductComponent
       },
       {
         path: 'orders', component: OrdersComponent
+      },
+      {
+        path:'feedback',component:FeedbackComponent
       },
       {
         path: '', redirectTo: '/admin/home', pathMatch: 'full'

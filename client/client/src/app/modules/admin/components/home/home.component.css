@@ -38,39 +38,11 @@
 
 
 
-   .update-add-product-container{
-    display: flex;
-    justify-content: center;
+
+
+.loader-container{
     height: 90vh;
-}
-
-
-.update-add-product-form-container{
     display: flex;
     align-items: center;
-    
+    justify-content: center;
 }
-@media screen and (max-width:768px) {
-    .update-add-product-form-container{
-        flex-direction: column;
-    }
-}
-
-
-.update-card{
-    width: 100%;
-    padding: 40px;
-}
-@media screen and (max-width:768px) {
-    .update-card{
-        border: 0;
-        padding: 30px;
-    }
-}
-
-
-
-.update-heading{
-    font-family: "Bree Serif";
-    font-size: 26px;
-} 

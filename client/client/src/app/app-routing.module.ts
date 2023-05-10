@@ -7,6 +7,7 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { MyCartComponent } from './components/my-cart/my-cart.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
   {
     path:'place-order/:id',
     component:PlaceOrderComponent
+  },
+  {
+    path:'feedback',
+    component:FeedbackComponent
   },
   {
     path:'admin',loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule)

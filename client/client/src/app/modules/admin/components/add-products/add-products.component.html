@@ -1,4 +1,7 @@
-<div class="add-product-container">
+<div class="loader-container w-100" *ngIf="isLoading">
+    <app-loader-spinner></app-loader-spinner>
+</div>
+<div class="add-product-container" *ngIf="!isLoading">
     <div class="card">
         <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)">
             <h2 class="heading text-center">Add Products</h2>

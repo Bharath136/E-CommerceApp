@@ -205,24 +205,46 @@ app.get('/cart', async (req, res) => {
 });
 
 
-// Create a new order
-app.post('/order', async (req, res) => {
-    console.log(req.body)
-    const order = new models.Order({
-        user: req.body.user,
-        phone: req.body.phone,
-        productId: req.body.productId,
-        product:await models.Product.findById(productId),
-        address: req.body.address
-    });
 
+app.post('/orders', async (req, res) => {
+    const { user, phone, productId, quantity,paymentMethod, address } = req.body;
+    
     try {
-        const newOrder = await order.save();
-        res.status(201).json(newOrder);
+      const order = new models.Order({
+        user,
+        phone,
+        productId,
+        quantity,
+        paymentMethod,
+        address
+      });
+  
+      const newOrder = await order.save();
+      res.status(201).json(newOrder);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
-});
+  });
+
+
+// Create a new order
+// app.post('/order', async (req, res) => {
+//     console.log(req.body)
+//     const order = new models.Order({
+//         user: req.body.user,
+//         phone: req.body.phone,
+//         productId: req.body.productId,
+//         product:await models.Product.findById(productId),
+//         address: req.body.address
+//     });
+
+//     try {
+//         const newOrder = await order.save();
+//         res.status(201).json(newOrder);
+//     } catch (err) {
+//         res.status(400).json({ message: err.message });
+//     }
+// });
 // app.post('/orders', (req, res, next) => {
 //     const order = new models.Order({
 //         user: req.body.user,
@@ -339,12 +361,10 @@ app.post('/payment/:id', adminAuthenticateToken, async (req, res) => {
     }
 });
 
-
-
 // // feedback schema
 
 // Create feedback from user
-app.post('/feedback', userAuthenticateToken, async (req, res) => {
+app.post('/feedback', async (req, res) => {
     try {
         const { user, message } = req.body;
         const feedback = new models.Feedback({ user, message });
@@ -356,7 +376,7 @@ app.post('/feedback', userAuthenticateToken, async (req, res) => {
 });
 
 // Check feedback (admin only)
-app.get('/feedback', adminAuthenticateToken, async (req, res) => {
+app.get('/feedback', async (req, res) => {
     try {
         const feedback = await models.Feedback.find();
         res.status(200).send(feedback);
@@ -396,7 +416,6 @@ app.post('/login', async (req, res) => {
   
     // Find the user by email in the database
     const user = await models.Users.findOne({ email });
- 
   
     // If the user doesn't exist, return an error
     if (!user) {
@@ -412,10 +431,6 @@ app.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-  
-
-    
-
    
     // Generate a JWT token
     if(!isAdmin){
@@ -424,7 +439,6 @@ app.post('/login', async (req, res) => {
     }else{
         const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey');
         res.json({ jwtToken });
-        console.log(jwtToken)
     }
     
   
@@ -575,10 +589,8 @@ app.delete('/products/:id', async (req, res) => {
 });
 
 app.put('/products/:id', async (req, res) => {
-    console.log(req.params.id)
     try {
         const updatedProduct = await models.Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        console.log(updatedProduct)
         if (!updatedProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }

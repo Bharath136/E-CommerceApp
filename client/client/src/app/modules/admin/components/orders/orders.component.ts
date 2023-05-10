@@ -9,10 +9,13 @@ import { Router } from '@angular/router';
 })
 export class OrdersComponent {
   public data: any[] = [];
+  public isLoading = false;
 
   constructor(private http: HttpClient, private route: Router) {
+    this.isLoading = true;
     this.http.get<any[]>('http://localhost:5100/orders').subscribe(data => {
       this.data = data;
+      this.isLoading = false;
     });
     const jwtToken = localStorage.getItem('adminJwtToken')
     if (!jwtToken){

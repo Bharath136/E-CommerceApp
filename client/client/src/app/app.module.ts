@@ -16,6 +16,8 @@ import { UpdateProductComponent } from './modules/admin/components/update-produc
 import { OrdersComponent } from './modules/admin/components/orders/orders.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
+import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { PlaceOrderComponent } from './components/place-order/place-order.compon
     UpdateProductComponent,
     OrdersComponent,
     ProductDetailsComponent,
-    PlaceOrderComponent
+    PlaceOrderComponent,
+    FeedbackComponent,
+    LoaderSpinnerComponent
   ],
   imports: [
     BrowserModule,

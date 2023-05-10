@@ -7,17 +7,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit{
-  public isUser = true 
   public isAdmin = false
 
   constructor(private route:Router){
-    
-  }
-  ngOnInit(): void {
-    this.isUser = true
     const token = localStorage.getItem('jwtToken')
     if(token){
-      this.isUser = true
       this.isAdmin = false
       localStorage.removeItem('adminJwtToken')
     }
@@ -25,7 +19,18 @@ export class HeaderComponent implements OnInit{
     if(jwtToken){
       localStorage.removeItem('jwtToken')
       this.isAdmin = true
-      this.isUser = false
+    }
+  }
+  ngOnInit(): void {
+    const token = localStorage.getItem('jwtToken')
+    if(token){
+      this.isAdmin = false
+      localStorage.removeItem('adminJwtToken')
+    }
+    const jwtToken = localStorage.getItem("adminJwtToken")
+    if(jwtToken){
+      localStorage.removeItem('jwtToken')
+      this.isAdmin = true
     }
   }
 

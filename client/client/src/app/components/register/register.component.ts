@@ -19,6 +19,14 @@ export class RegisterComponent {
       email:new FormControl(null,Validators.required),
       password:new FormControl(null,Validators.required),
     })
+    const jwtToken = localStorage.getItem('adminJwtToken')
+    if (jwtToken){
+      this.route.navigate(['/admin/home'])
+    }
+    const token = localStorage.getItem("jwtToken")
+    if (token) {
+      this.route.navigate(['/home'])
+    }
    }
 
    onSubmit(details: { firstname: string, lastname: string, username: string, email: string, password: string }): void {

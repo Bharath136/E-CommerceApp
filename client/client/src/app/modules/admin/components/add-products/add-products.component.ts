@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AddProductsComponent {
   regForm: FormGroup;
+  public isLoading = false;
 
   constructor(private http: HttpClient, private route: Router) {
     this.regForm = new FormGroup({
@@ -32,9 +33,11 @@ export class AddProductsComponent {
   }
 
   onSubmit(details = { productname: String, description: String, price: String, brand: String, image: String, category: String, countInStock: String, rating: String }): void {
+    this.isLoading = true;
     this.http.post('http://localhost:5100/add-products', details).subscribe((response) => {
       window.alert("Product Added Successfully!");
       this.regForm.reset();
+      this.isLoading = false;
     });
   }
   

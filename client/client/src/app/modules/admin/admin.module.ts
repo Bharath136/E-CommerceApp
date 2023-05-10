@@ -10,6 +10,8 @@ import { AddProductsComponent } from './components/add-products/add-products.com
 import { AddCategoriesComponent } from './components/add-categories/add-categories.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FeedbackComponent } from './components/feedback/feedback.component';
+import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     HeaderComponent,
     FooterComponent,
     AddProductsComponent,
-    AddCategoriesComponent
+    AddCategoriesComponent,
+    FeedbackComponent,
+    LoaderSpinnerComponent
   ],
   imports: [
     CommonModule,
