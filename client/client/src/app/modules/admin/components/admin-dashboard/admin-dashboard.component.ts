@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent {
-  
+  public isSidebarHidden = false;
+
+  toggleSidebar(): void {
+    this.isSidebarHidden = !this.isSidebarHidden;
+  }
 }

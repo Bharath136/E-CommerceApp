@@ -7,6 +7,7 @@ import { AddCategoriesComponent } from './components/add-categories/add-categori
 import { UpdateProductComponent } from './components/update-product/update-product.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 const routes: Routes = [
@@ -14,7 +15,7 @@ const routes: Routes = [
     path: '', component: AdminDashboardComponent,
     children: [
       {
-        path: 'home', component: HomeComponent
+        path: 'products', component: HomeComponent
       },
       {
         path: 'add-products', component: AddProductsComponent
@@ -32,7 +33,10 @@ const routes: Routes = [
         path:'feedback',component:FeedbackComponent
       },
       {
-        path: '', redirectTo: '/admin/home', pathMatch: 'full'
+        path:'dashboard',component:DashboardComponent
+      },
+      {
+        path: '', redirectTo: '/admin/dashboard', pathMatch: 'full'
       }
     ]
   }

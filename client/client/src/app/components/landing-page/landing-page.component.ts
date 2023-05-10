@@ -34,7 +34,7 @@ export class LandingPageComponent {
       this.isLoading = false
     });
     const jwtToken = localStorage.getItem('adminJwtToken')
-    if (jwtToken){
+    if (jwtToken) {
       window.alert("You can't Access this!")
       this.route.navigate(['/admin/home'])
     }
@@ -53,9 +53,9 @@ export class LandingPageComponent {
   onAddToCart(productId: string): void {
     const token = localStorage.getItem("jwtToken")
     const jwtToken = localStorage.getItem('adminJwtToken')
-    if (jwtToken){
+    if (jwtToken) {
       this.route.navigate(['/admin/home'])
-    }if (!token) {
+    } if (!token) {
       window.alert("You can't Access this! because your not an loggedin user!")
       this.route.navigate(['/login'])
     } else {
@@ -69,12 +69,7 @@ export class LandingPageComponent {
         }
       );
     }
-    
-    
-
   }
-
-
 
   onBuyNow(orderDetails = { user: String, phone: String, productId: this.itemId, address1: String, address2: String }): void {
     const token = localStorage.getItem("jwtToken")
