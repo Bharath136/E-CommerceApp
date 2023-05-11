@@ -41,11 +41,14 @@ const addToCartSchema = new mongoose.Schema({
 
 
 const orderSchema = new mongoose.Schema({ 
+    firstname: {type: String, required:true},
+    lastname: {type: String, required:true},
     user: { type: String , ref: 'User', required: true },
     phone: { type: String, required: true },
     productId: { type: String, required: true },
     quantity: {type: String, default:1},
-    status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered'], default: 'Pending' },
+    price: {type: String, required: true},
+    status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered','Canceled',], default: 'Pending' },
     paymentMethod: {type: String,required:true},
     address: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
@@ -57,6 +60,7 @@ const paymentSchema = new mongoose.Schema({
     order: { type: String, ref: 'Order', required: true },
     amount: { type: Number, required: true },
     paymentMethod: { type: String, required: true },
+    deliveryStatus: {type: String, required: true},
     status: { type: String, enum: ['Pending', 'Success', 'Failed'], default: 'Pending' },
     createdAt: { type: Date, default: Date.now }
 });

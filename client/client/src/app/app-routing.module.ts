@@ -8,6 +8,8 @@ import { MyCartComponent } from './components/my-cart/my-cart.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { HistoryComponent } from './components/history/history.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,14 @@ const routes: Routes = [
   {
     path:'feedback',
     component:FeedbackComponent
+  },
+  {
+    path:'my-orders',
+    component:MyOrdersComponent
+  },
+  {
+    path:'history',
+    component:HistoryComponent
   },
   {
     path:'admin',loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule)

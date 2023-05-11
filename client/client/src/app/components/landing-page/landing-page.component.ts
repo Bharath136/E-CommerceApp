@@ -48,17 +48,17 @@ export class LandingPageComponent {
       const searchMatch =
         !this.searchInput ||
         product.productname.toLowerCase().includes(this.searchInput.toLowerCase());
-  
+
       const categoryMatch =
         ((!this.electronicsSelected && !this.clothesSelected && !this.gadgetsSelected) ||
-        (this.electronicsSelected && product.category === 'Mobile') ||
-        (this.clothesSelected && product.category === 'Clothing') ||
-        (this.gadgetsSelected && product.category === 'Shoes'));
-  
+          (this.electronicsSelected && product.category === 'Mobile') ||
+          (this.clothesSelected && product.category === 'Clothing') ||
+          (this.gadgetsSelected && product.category === 'Shoes'));
+
       return searchMatch && categoryMatch;
     });
   }
-  
+
 
   onAddToCart(productId: string): void {
     const token = localStorage.getItem("jwtToken")

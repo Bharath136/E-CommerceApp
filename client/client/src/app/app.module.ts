@@ -18,6 +18,8 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { PlaceOrderComponent } from './components/place-order/place-order.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { HistoryComponent } from './components/history/history.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinn
     ProductDetailsComponent,
     PlaceOrderComponent,
     FeedbackComponent,
-    LoaderSpinnerComponent
+    LoaderSpinnerComponent,
+    MyOrdersComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

@@ -36,7 +36,8 @@ export class PlaceOrderComponent {
 
     this.product = {}
     this.regForm = new FormGroup({
-      user: new FormControl(null, Validators.required),
+      firstname: new FormControl(null, Validators.required),
+      lastname: new FormControl(null, Validators.required),
       phone: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
@@ -73,12 +74,15 @@ export class PlaceOrderComponent {
         this.isLoading = false;
       }
     })
-  }
+  }  
 
-  createOrder(orderDetails = { user: String, phone: String, productId: this.routerId, address: String, quantity: String, paymentMethod: String }): void {
+  createOrder(orderDetails = {firstname:String,lastname:String, phone: String, productId: this.routerId, address: String, quantity: String, paymentMethod: String }): void {
     this.isLoading = true;
+    const userId = localStorage.getItem('userId')
     const order = {
-      user: orderDetails.user,
+      firstname:orderDetails.firstname,
+      lastname:orderDetails.lastname,
+      user: userId,
       phone: orderDetails.phone,
       productId: this.routerId,
       quantity: orderDetails.quantity,

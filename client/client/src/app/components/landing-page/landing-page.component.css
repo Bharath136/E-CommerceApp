@@ -8,12 +8,13 @@
     display: flex;
 }
 
-.body-container{
+.body-container {
     height: 90vh;
     overflow: auto;
     width: 80%;
     padding: 40px 20px;
 }
+
 @media screen and (max-width:768px) {
     .body-container {
         width: 100%;
@@ -74,15 +75,6 @@
     justify-content: center;
 }
 
-/* .form-check {
-    padding: 0.5rem;
-  } */
-
-  /* .form-check:hover {
-    background-color: rgb(98, 90, 252);
-  }
-
-  .form-check-input:checked ~ .form-check-label {
-    background-color: rgb(98, 90, 252);
-    color: #fff;
-  } */
+.card-img-top{
+    max-height: 240px;
+}

@@ -31,21 +31,22 @@
         <div class="card mb-2" *ngFor="let payment of data">
             <div class="card-body">
                 <h5 class="card-title"><strong>Payment ID:</strong> {{ payment._id }}</h5>
-                <p class="card-text"><strong>Name:</strong> {{ payment.user }}</p>
+                <p class="card-text"><strong>UserId:</strong> {{ payment.user }}</p>
                 <p class="card-text"><strong>Order:</strong> {{ payment.order }}</p>
                 <p class="card-text"><strong>Amount:</strong> {{ payment.amount }} /-</p>
                 <p class="card-text"><strong>Method:</strong> {{ payment.paymentMethod }}</p>
-                <p class="card-text"><strong>Status:</strong> {{ payment.status }}</p>
+                <p class="card-text"><strong>Payment Status: </strong> {{ payment.status }}</p>
+                <p class="card-text"><strong>Order Status: </strong>{{ payment.deliveryStatus}}</p>
                 <div class="d-flex align-items-center justify-content-between">
                     <p class="card-text"><strong>Created At:</strong> {{ payment.createdAt | date }}</p>
                     <button class="btn" *ngIf="payment.status === 'Pending'"
                         style="background-color: rgb(98, 90, 252); color: #fff; width: 150px;"
                         (click)="onChangeStatus(payment._id)">Manage
                         payment</button>
-                    <button class="btn btn-success" *ngIf="payment.status === 'Success'" [disabled]="true"
+                    <button class="btn btn-success" *ngIf="payment.deliveryStatus === 'Delivered'" [disabled]="true"
                         (click)="onChangeStatus(payment._id)">Paid Successfully</button>
-                    <button class="btn btn-danger" *ngIf="payment.status === 'Failed'"
-                        (click)="onChangeStatus(payment._id)">Failed</button>
+                    <button class="btn btn-danger"  *ngIf="payment.deliveryStatus === 'Canceled'"
+                        (click)="onChangeStatus(payment._id)" [disabled]="true">Customer Canceled</button>
                 </div>
             </div>
         </div>

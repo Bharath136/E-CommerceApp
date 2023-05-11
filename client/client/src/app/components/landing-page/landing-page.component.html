@@ -33,26 +33,30 @@
     <div class="sidebar-container p-4">
       <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mb-4">Filters</h1>
       <div class="input-group mb-3">
-        <input type="text" class="form-control" [(ngModel)]="searchInput" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+        <input type="text" class="form-control" [(ngModel)]="searchInput" placeholder="Search" aria-label="Search"
+          aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button"><i class="fa fa-search"></i></button>
         </div>
       </div>
       <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mt-4">Category</h1>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="Mobile" id="electronics" [(ngModel)]="electronicsSelected" (change)="filterItems()">
+        <input class="form-check-input" type="checkbox" value="Mobile" id="electronics"
+          [(ngModel)]="electronicsSelected" (change)="filterItems()">
         <label class="form-check-label" for="electronics">
           Mobile
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="Clothing" id="clothes" [(ngModel)]="clothesSelected" (change)="filterItems()">
+        <input class="form-check-input" type="checkbox" value="Clothing" id="clothes" [(ngModel)]="clothesSelected"
+          (change)="filterItems()">
         <label class="form-check-label" for="clothes">
           Clothing
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="Shoes" id="gadgets" [(ngModel)]="gadgetsSelected" (change)="filterItems()">
+        <input class="form-check-input" type="checkbox" value="Shoes" id="gadgets" [(ngModel)]="gadgetsSelected"
+          (change)="filterItems()">
         <label class="form-check-label" for="gadgets">
           Shoes
         </label>
@@ -68,7 +72,7 @@
             <h5 class="card-title m-0">{{product.productname}}</h5>
             <p class="card-text m-0">{{product.description}}</p>
             <p class="card-text mt-0">price: {{product.price}}/-</p>
-            <button (click)="onAddToCart(product._id)" class="btn btn-primary w-100 mt-2">Add To Cart</button>
+            <button (click)="onAddToCart(product._id)" class="btn btn-primary w-100">Add To Cart</button>
             <button routerLink="/place-order/{{product._id}}" class="btn btn-warning w-100 mt-2">Buy Now</button>
           </div>
         </li>

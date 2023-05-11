@@ -163,7 +163,7 @@ app.post('/add-to-cart', async (req, res) => {
 app.delete('/remove-from-cart/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const result = await models.AddToCart.deleteOne({ productId : id });
+        const result = await models.AddToCart.deleteOne({ productId: id });
         if (result.deletedCount === 0) {
             res.status(404).json({ message: `Product with id ${id} not found in the cart` });
         } else {
@@ -207,44 +207,49 @@ app.get('/cart', async (req, res) => {
 
 
 app.post('/orders', async (req, res) => {
-    const { user, phone, productId, quantity,paymentMethod, address } = req.body;
-    
-    try {
-      const order = new models.Order({
-        user,
-        phone,
-        productId,
-        quantity,
-        paymentMethod,
-        address
-      });
-      const product = await models.Product.findById(productId);
-      const amount = product.price * quantity;
-      const newOrder = await order.save();
-      // Update payment with order details
-      const payment = new models.Payment({
-        user,
-        order: newOrder._id, // Associate the order with the payment
-        amount,
-        paymentMethod,
-        status: 'Pending'
-      });
-      const savedPayment = await payment.save();
-      res.status(201).json(newOrder);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-  });
+    const { firstname, lastname, user, phone, productId, quantity, paymentMethod, address } = req.body;
+    const product = await models.Product.findById(productId);
+    const amount = product.price * quantity;
 
-  app.get('/payments', async (req, res) => {
     try {
-      const payments = await models.Payment.find();
-      res.status(200).json(payments);
+        const order = new models.Order({
+            firstname,
+            lastname,
+            user,
+            price: amount,
+            phone,
+            productId,
+            quantity,
+            paymentMethod,
+            address
+        });
+
+        const newOrder = await order.save();
+        // Update payment with order details
+        const payment = new models.Payment({
+            user,
+            order: newOrder._id, // Associate the order with the payment
+            amount,
+            deliveryStatus: newOrder.status,
+            paymentMethod,
+            status: 'Pending'
+        });
+        const savedPayment = await payment.save();
+        res.status(201).json(newOrder);
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
+        res.status(400).json({ message: err.message });
     }
-  });
+});
+
+app.get('/payments', async (req, res) => {
+    try {
+        const payments = await models.Payment.find();
+        res.status(200).json(payments);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
 
 
 
@@ -260,43 +265,104 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-// app.post('/orders/:id', async (req, res) => {
-//     console.log(req.params.id)
-//     try {
-//         const order = await models.Order.findById(req.params.id);
-//         if (req.body.status) {
-//             order.status = req.body.status;
-//         }
-//         await order.save();
-//         res.json(order);
-//     } catch (err) {
-//         res.status(400).json({ message: err.message });
-//     }
-// });
 
+// Define a route for fetching orders by user ID
+app.get('/my-orders/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const userOrders = await models.Order.find({ user: userId });
+        if (userOrders.length === 0) {
+            return res.status(404).json({ message: 'User orders not found' });
+        }
+        res.json(userOrders);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 
 // Manage order (admin only)
+// app.put('/orders/:id', async (req, res) => {
+//     try {
+//       const orderId = req.params.id;
+//       const { status } = req.body;
+
+//       const order = await models.Order.findById(orderId);
+//       if (!order) {
+//         return res.status(404).send('Order not found');
+//       }
+
+//       order.status = status; // Update the status property  
+//       const updatedOrder = await order.save();
+//       res.send(updatedOrder);
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).send('Server error');
+//     }
+//   });
 app.put('/orders/:id', async (req, res) => {
     try {
-      const orderId = req.params.id;
-      const { status } = req.body;
-  
-      const order = await models.Order.findById(orderId);
-      if (!order) {
-        return res.status(404).send('Order not found');
-      }
-  
-      order.status = status; // Update the status property
-  
-      const updatedOrder = await order.save();
-      res.send(updatedOrder);
+        const orderId = req.params.id;
+        const { status } = req.body;
+
+        const order = await models.Order.findById(orderId);
+        if (!order) {
+            return res.status(404).send('Order not found');
+        }
+
+        order.status = status; // Update the order status property
+        console.log(orderId)
+        const payment = await models.Payment.findOne({ order: orderId });
+        if (!payment) {
+            return res.status(404).send('Payment not found');
+        }
+
+        payment.deliveryStatus = status; // Update the payment status property
+        payment.status = 'Success'
+
+        await payment.save();
+        const updatedOrder = await order.save();
+        res.send(updatedOrder);
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
+        console.error(error);
+        res.status(500).send('Server error');
     }
-  });
-  
+});
+
+
+app.put('/cancel-order/:id', async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const { status } = req.body;
+
+        const order = await models.Order.findById(orderId);
+        if (!order) {
+            return res.status(404).send('Order not found');
+        }
+
+        order.status = status; // Update the order status property
+        console.log(orderId)
+        const payment = await models.Payment.findOne({ order: orderId });
+        if (!payment) {
+            return res.status(404).send('Payment not found');
+        }
+
+        payment.deliveryStatus = status;
+        payment.status = "Failed"
+
+        await payment.save();
+        const updatedOrder = await order.save();
+        res.send(updatedOrder);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+
+
+
+
 
 app.get('/orders/:id', async (req, res) => {
     try {
@@ -313,14 +379,14 @@ app.get('/orders/:id', async (req, res) => {
 // POST /payments
 app.post('/payments', async (req, res) => {
     try {
-      const payment = new models.Payment(req.body);
-      const savedPayment = await payment.save();
-      res.status(201).json(savedPayment);
+        const payment = new models.Payment(req.body);
+        const savedPayment = await payment.save();
+        res.status(201).json(savedPayment);
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Server Error');
+        console.error(err);
+        res.status(500).send('Server Error');
     }
-  });
+});
 
 // Manage payment (admin only)
 // Define the route for updating a payment
@@ -328,7 +394,7 @@ app.put('/payment/:id', async (req, res) => {
     console.log(req.body);
     try {
         const paymentId = req.params.id;
-        
+
         const payment = await models.Payment.findById(paymentId);
         if (!payment) {
             return res.status(404).send('Payment not found');
@@ -411,38 +477,38 @@ app.post('/api/register', async (request, response) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-  
+
     // Find the user by email in the database
     const user = await models.Users.findOne({ email });
-  
+
     // If the user doesn't exist, return an error
     if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const isAdmin = email=='virat@gmail.com' && password == 'virat@1234';
-  
+    const isAdmin = email == 'virat@gmail.com' && password == 'virat@1234';
+
     // Compare the password with the hashed password in the database
     const isMatch = await bcrypt.compare(password, user.password);
-  
+
     // If the password doesn't match, return an error
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid email or password' });
     }
-   
+
     // Generate a JWT token
-    if(!isAdmin){
+    if (!isAdmin) {
         const token = jwt.sign({ userId: user._id }, 'mysecretkey');
-        res.json({ token });
-    }else{
+        res.json({ user, token });
+    } else {
         const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey');
-        res.json({ jwtToken });
+        res.json({ user, jwtToken });
     }
-    
-  
+
+
     // Return the token
-    
-  });
+
+});
 
 
 
@@ -452,7 +518,7 @@ app.post('/register', async (req, res) => {
     try {
         const { firstname, lastname, username, email, password } = req.body;
         const user = await models.Users.findOne({ email });
-        
+
         if (user) {
             return res.status(400).send('User already exists');
         }

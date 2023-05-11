@@ -29,6 +29,10 @@ export class LoginComponent {
   onSubmit(details = { email: String, password: String }): void {
     this.http.post('http://localhost:5100/login', details).subscribe(
       (response: any) => {
+        console.log(response)
+        if(response && response.user._id){
+          localStorage.setItem('userId',response.user._id)
+        }
         if (response && response.token) {
           window.alert('User Login Successfully!');
           this.route.navigate(['/home']);
