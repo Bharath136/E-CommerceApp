@@ -2,9 +2,11 @@
     <app-loader-spinner></app-loader-spinner>
 </div>
 <div class="cotegory-container" *ngIf="!isLoading">
-    <div class="card  mt-3">
+    <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mb-4">Add Categories</h1>
+    <div class="card  mt-3" style="border: 0;">
         <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)"class="form">
-            <h2 class="heading text-center">Add Category</h2>
+            <!-- <h2 class="heading text-center">Add Category</h2> -->
+            <!-- <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mb-4">Add Products</h1> -->
             <div class="form-group mb-2">
                 <label for="category">Category Name</label>
                 <input placeholder="Enter category" type="text" class="form-control" id="category" formControlName="category" required>

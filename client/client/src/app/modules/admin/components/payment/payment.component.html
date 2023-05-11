@@ -1,0 +1,55 @@
+<div class="payment-container p-4">
+    <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mb-4">Manage Payments</h1>
+    <div *ngIf="isUpdate">
+        <form [formGroup]="statusForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)">
+            <div class="form-group">
+                <label for="statusSelect">Select Status</label>
+                <select class="form-control" id="statusSelect" formControlName="status">
+                    <option value="Pending">Pending</option>
+                    <option value="Success">Success</option>
+                    <option value="Failed">Failed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input placeholder="Enter amount" type="text" class="form-control" id="amount" formControlName="amount"
+                    required>
+                <div *ngIf="statusForm.controls['amount'].touched && statusForm.controls['amount']?.['errors']">
+                    <div *ngIf="statusForm.controls['amount']?.['errors']?.['required']"
+                        class="error-message text-danger">
+                        Amount is required
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+        </form>
+    </div>
+
+    <div class="payments-list-container" *ngIf="!isUpdate">
+        <div class="card mb-2" *ngFor="let payment of data">
+            <div class="card-body">
+                <h5 class="card-title"><strong>Payment ID:</strong> {{ payment._id }}</h5>
+                <p class="card-text"><strong>Name:</strong> {{ payment.user }}</p>
+                <p class="card-text"><strong>Order:</strong> {{ payment.order }}</p>
+                <p class="card-text"><strong>Amount:</strong> {{ payment.amount }} /-</p>
+                <p class="card-text"><strong>Method:</strong> {{ payment.paymentMethod }}</p>
+                <p class="card-text"><strong>Method:</strong> {{ payment.status }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <p class="card-text"><strong>Created At:</strong> {{ payment.createdAt | date }}</p>
+                    <button class="btn" *ngIf="payment.status === 'Pending'"
+                        style="background-color: rgb(98, 90, 252); color: #fff; width: 150px;"
+                        (click)="onChangeStatus(payment._id)">Manage
+                        payment</button>
+                    <button class="btn btn-success" *ngIf="payment.status === 'Success'" [disabled]="true"
+                        (click)="onChangeStatus(payment._id)">Paid Successfully</button>
+                    <button class="btn btn-danger" *ngIf="payment.status === 'Failed'"
+                        (click)="onChangeStatus(payment._id)">Failed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

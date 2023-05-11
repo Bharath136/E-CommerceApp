@@ -13,12 +13,14 @@ import { FooterComponent } from './components/footer/footer.component';
 import { AddProductsComponent } from './components/add-products/add-products.component';
 import { AddCategoriesComponent } from './components/add-categories/add-categories.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PaymentComponent } from './components/payment/payment.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FeedbackComponent,
     LoaderSpinnerComponent,
     SidebarComponent,
-    DashboardComponent
+    DashboardComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +43,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule,
+    NgbModule
   ]
 })
 export class AdminModule { }

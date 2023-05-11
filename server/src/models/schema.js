@@ -39,17 +39,7 @@ const addToCartSchema = new mongoose.Schema({
     quantity: { type: Number, minimum: 1, required: true, default: 1 },
 });
 
-// const orderSchema = new mongoose.Schema({ 
-//     user: { type: String , ref: 'User', required: true },
-//     phone: {type: String, required:true},
-//     products: [{
-//         product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-//         quantity: { type: Number,default: 1 }
-//     }],
-//     status: { type: String, enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered'], default: 'Pending' },
-//     address: { type: String, require: true },
-//     createdAt: { type: Date, default: Date.now }
-// });
+
 const orderSchema = new mongoose.Schema({ 
     user: { type: String , ref: 'User', required: true },
     phone: { type: String, required: true },
@@ -63,10 +53,10 @@ const orderSchema = new mongoose.Schema({
  
 
 const paymentSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
+    user: { type: String, ref: 'User', required: true },
+    order: { type: String, ref: 'Order', required: true },
     amount: { type: Number, required: true },
-    method: { type: String, enum: ['Credit Card', 'Debit Card', 'Net Banking', 'UPI', 'COD'], required: true },
+    paymentMethod: { type: String, required: true },
     status: { type: String, enum: ['Pending', 'Success', 'Failed'], default: 'Pending' },
     createdAt: { type: Date, default: Date.now }
 });

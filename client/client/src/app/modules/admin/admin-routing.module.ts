@@ -8,6 +8,7 @@ import { UpdateProductComponent } from './components/update-product/update-produ
 import { OrdersComponent } from './components/orders/orders.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,9 @@ const routes: Routes = [
       },
       {
         path:'dashboard',component:DashboardComponent
+      },
+      {
+        path:'payment',component:PaymentComponent
       },
       {
         path: '', redirectTo: '/admin/dashboard', pathMatch: 'full'

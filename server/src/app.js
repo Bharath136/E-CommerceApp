@@ -218,52 +218,33 @@ app.post('/orders', async (req, res) => {
         paymentMethod,
         address
       });
-  
+      const product = await models.Product.findById(productId);
+      const amount = product.price * quantity;
       const newOrder = await order.save();
+      // Update payment with order details
+      const payment = new models.Payment({
+        user,
+        order: newOrder._id, // Associate the order with the payment
+        amount,
+        paymentMethod,
+        status: 'Pending'
+      });
+      const savedPayment = await payment.save();
       res.status(201).json(newOrder);
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
   });
 
-
-// Create a new order
-// app.post('/order', async (req, res) => {
-//     console.log(req.body)
-//     const order = new models.Order({
-//         user: req.body.user,
-//         phone: req.body.phone,
-//         productId: req.body.productId,
-//         product:await models.Product.findById(productId),
-//         address: req.body.address
-//     });
-
-//     try {
-//         const newOrder = await order.save();
-//         res.status(201).json(newOrder);
-//     } catch (err) {
-//         res.status(400).json({ message: err.message });
-//     }
-// });
-// app.post('/orders', (req, res, next) => {
-//     const order = new models.Order({
-//         user: req.body.user,
-//         phone: req.body.phone,
-//         products: req.body.products,
-//         status: req.body.status,
-//         address: req.body.address,
-//         createdAt: req.body.createdAt
-//     });
-//     order.save()
-//     .then(result => {
-//         console.log(result);
-//         res.status(201).json({ message: "Order created successfully", order: result });
-//     })
-//     .catch(err => {
-//         console.log(err);
-//         res.status(500).json({ error: err });
-//     });
-// });
+  app.get('/payments', async (req, res) => {
+    try {
+      const payments = await models.Payment.find();
+      res.status(200).json(payments);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+  });
 
 
 
@@ -279,39 +260,43 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-app.patch('/orders/:id', async (req, res) => {
-    try {
-        const order = await models.Order.findById(req.params.id);
-        if (req.body.status) {
-            order.status = req.body.status;
-        }
-        await order.save();
-        res.json(order);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
+// app.post('/orders/:id', async (req, res) => {
+//     console.log(req.params.id)
+//     try {
+//         const order = await models.Order.findById(req.params.id);
+//         if (req.body.status) {
+//             order.status = req.body.status;
+//         }
+//         await order.save();
+//         res.json(order);
+//     } catch (err) {
+//         res.status(400).json({ message: err.message });
+//     }
+// });
 
 
 
 // Manage order (admin only)
-app.put('/order/:id', async (req, res) => {
+app.put('/orders/:id', async (req, res) => {
     try {
-        const orderId = req.params.id;
-        const order = await models.Order.findById(orderId);
-        if (!order) {
-            return res.status(404).send('Order not found');
-        }
-        Object.keys(req.body).forEach(key => {
-            order[key] = req.body[key];
-        });
-        const updatedOrder = await order.save();
-        res.send(updatedOrder);
+      const orderId = req.params.id;
+      const { status } = req.body;
+  
+      const order = await models.Order.findById(orderId);
+      if (!order) {
+        return res.status(404).send('Order not found');
+      }
+  
+      order.status = status; // Update the status property
+  
+      const updatedOrder = await order.save();
+      res.send(updatedOrder);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+      console.error(error);
+      res.status(500).send('Server error');
     }
-});
+  });
+  
 
 app.get('/orders/:id', async (req, res) => {
     try {
@@ -325,13 +310,25 @@ app.get('/orders/:id', async (req, res) => {
     }
 });
 
-
+// POST /payments
+app.post('/payments', async (req, res) => {
+    try {
+      const payment = new models.Payment(req.body);
+      const savedPayment = await payment.save();
+      res.status(201).json(savedPayment);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+  });
 
 // Manage payment (admin only)
 // Define the route for updating a payment
-app.post('/payment/:id', adminAuthenticateToken, async (req, res) => {
+app.put('/payment/:id', async (req, res) => {
+    console.log(req.body);
     try {
         const paymentId = req.params.id;
+        
         const payment = await models.Payment.findById(paymentId);
         if (!payment) {
             return res.status(404).send('Payment not found');
@@ -360,6 +357,7 @@ app.post('/payment/:id', adminAuthenticateToken, async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
 
 // // feedback schema
 
@@ -515,7 +513,7 @@ app.post('/api/user/login', async (request, response) => {
 
 // get users
 
-app.get('/api/users', async (req, res) => {
+app.get('/users', async (req, res) => {
     try {
         const users = await models.Users.find();
         res.send(users);

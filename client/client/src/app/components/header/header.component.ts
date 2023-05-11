@@ -6,39 +6,39 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   public isAdmin = false
 
-  constructor(private route:Router){
+  constructor(private route: Router) {
     const token = localStorage.getItem('jwtToken')
-    if(token){
+    if (token) {
       this.isAdmin = false
       localStorage.removeItem('adminJwtToken')
     }
     const jwtToken = localStorage.getItem("adminJwtToken")
-    if(jwtToken){
+    if (jwtToken) {
       localStorage.removeItem('jwtToken')
       this.isAdmin = true
     }
   }
   ngOnInit(): void {
     const token = localStorage.getItem('jwtToken')
-    if(token){
+    if (token) {
       this.isAdmin = false
       localStorage.removeItem('adminJwtToken')
     }
     const jwtToken = localStorage.getItem("adminJwtToken")
-    if(jwtToken){
+    if (jwtToken) {
       localStorage.removeItem('jwtToken')
       this.isAdmin = true
     }
   }
 
-  onLogout(){
+  onLogout() {
     localStorage.removeItem('jwtToken')
     localStorage.removeItem('adminJwtToken')
     window.alert("Logout Successful!")
     this.route.navigate(['/home'])
-    this.isAdmin = false 
+    this.isAdmin = false
   }
 }

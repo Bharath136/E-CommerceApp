@@ -34,7 +34,7 @@ export class LoginComponent {
           this.route.navigate(['/home']);
           localStorage.setItem('jwtToken', response.token);
         } else {
-          this.route.navigate(['/admin/home']);
+          this.route.navigate(['/admin/dashboard']);
           localStorage.setItem('adminJwtToken', response.jwtTtoken);
           window.alert('Admin Login Successfully!');
         }

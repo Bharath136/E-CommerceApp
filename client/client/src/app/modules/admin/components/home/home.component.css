@@ -1,5 +1,7 @@
 .main-container{
     height: 90vh;
+    overflow: auto;
+    width: 100%;
 }
 .products-container{
     width: 100%;
@@ -11,9 +13,8 @@
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: space-between;
-    height: 90vh;
-    overflow: auto;
-    width: 100%;
+    list-style-type: none;
+    padding: 0;
 }
 @media screen and (max-width:768px) {
     .products-list-container{
@@ -35,10 +36,6 @@
     transform: scale(1.02);
     transition: all 0.3s ease;
   }
-
-
-
-
 
 .loader-container{
     height: 90vh;

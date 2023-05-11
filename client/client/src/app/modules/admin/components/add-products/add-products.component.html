@@ -2,9 +2,10 @@
     <app-loader-spinner></app-loader-spinner>
 </div>
 <div class="add-product-container" *ngIf="!isLoading">
-    <div class="card">
+    <div class="card" style="border: none;">
         <form [formGroup]="regForm" #r="ngForm" (ngSubmit)="onSubmit(r.value)">
-            <h2 class="heading text-center">Add Products</h2>
+            <!-- <h2 class="heading text-center">Add Products</h2> -->
+            <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="mb-4">Add Products</h1>
             <div class="add-product-form-container row">
                 <div class="col-6 col-12 col-md-6 ">
                     <div class="form-group mb-2">
