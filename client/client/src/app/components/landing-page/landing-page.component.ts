@@ -10,10 +10,13 @@ import { Router } from '@angular/router';
 })
 export class LandingPageComponent {
   public data: any[] = [];
-  public searchText: string;
+  public searchInput: string = '';
   public itemId: string;
   public product: any = {};
   public isLoading = false;
+  electronicsSelected = '';
+  clothesSelected = '';
+  gadgetsSelected = false;
 
   regForm: FormGroup;
 
@@ -28,7 +31,7 @@ export class LandingPageComponent {
       address: new FormControl(null, Validators.required),
       paymentMethod: new FormControl(null, Validators.required)
     })
-    this.searchText = '';
+    this.searchInput = '';
     this.http.get<any[]>('http://localhost:5100/products').subscribe(data => {
       this.data = data;
       this.isLoading = false
@@ -40,15 +43,22 @@ export class LandingPageComponent {
     }
   }
 
-  filterData() {
-    if (this.searchText) {
-      return this.data.filter((product) =>
-        product.productname.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      return this.data;
-    }
+  filterItems() {
+    return this.data.filter(product => {
+      const searchMatch =
+        !this.searchInput ||
+        product.productname.toLowerCase().includes(this.searchInput.toLowerCase());
+  
+      const categoryMatch =
+        ((!this.electronicsSelected && !this.clothesSelected && !this.gadgetsSelected) ||
+        (this.electronicsSelected && product.category === 'Mobile') ||
+        (this.clothesSelected && product.category === 'Clothing') ||
+        (this.gadgetsSelected && product.category === 'Shoes'));
+  
+      return searchMatch && categoryMatch;
+    });
   }
+  
 
   onAddToCart(productId: string): void {
     const token = localStorage.getItem("jwtToken")

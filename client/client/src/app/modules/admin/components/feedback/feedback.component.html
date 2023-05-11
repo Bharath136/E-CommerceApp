@@ -5,16 +5,15 @@
     <h1 style="color: rgb(98, 90, 252); font-size: 38px; font-weight: bold;" class="ml-4 mt-4">Feedbacks</h1>
     <div class="container">
         <div class="row">
-          <div class="col-md-6">
-            <div *ngFor="let item of data" class="card mb-3">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.user }}</h5>
-                <p class="card-text">{{ item.message }}</p>
-                <p class="card-text"><small class="text-muted">{{ item.createdAt }}</small></p>
-              </div>
+            <div class="col-12">
+                <div *ngFor="let item of data" class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.user }}</h5>
+                        <p class="card-text">{{ item.message }}</p>
+                        <p class="card-text"><small class="text-muted">{{ item.createdAt| date }}</small></p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      
+    </div>
 </div>

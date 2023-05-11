@@ -30,7 +30,6 @@ export class MyCartComponent {
 
   onRemove(id: string): void {
     this.isLoading = true
-    console.log(id)
     this.http.delete(`http://localhost:5100/remove-from-cart/${id}`).subscribe((res) => {
       window.alert('Item removed from cart.')
       this.http.get<any[]>('http://localhost:5100/cart').subscribe(data => {

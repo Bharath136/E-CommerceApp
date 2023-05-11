@@ -31,7 +31,7 @@
         <p class="card-text"><strong>Total price:</strong>{{ item.price}}</p>
         <p class="card-text"><strong>Payment Method:</strong> {{ item.paymentMethod }}</p>
         <p class="card-text"><strong>Address:</strong> {{ item.address }}</p>
-        <p class="card-text"><strong>Created At: </strong>{{ item.createdAt}}</p>
+        <p class="card-text"><strong>Created At: </strong>{{ item.createdAt | date}}</p>
         <div class="d-flex align-items-center justify-content-between">
           <p class="card-text"><strong>Status:</strong> {{ item.status }}</p>
           <button class="btn" (click)="onChangeStatus(item._id)" style="background-color: rgb(98, 90, 252); color: #fff; width: 150px;">Update status</button>

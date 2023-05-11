@@ -35,7 +35,7 @@
                 <p class="card-text"><strong>Order:</strong> {{ payment.order }}</p>
                 <p class="card-text"><strong>Amount:</strong> {{ payment.amount }} /-</p>
                 <p class="card-text"><strong>Method:</strong> {{ payment.paymentMethod }}</p>
-                <p class="card-text"><strong>Method:</strong> {{ payment.status }}</p>
+                <p class="card-text"><strong>Status:</strong> {{ payment.status }}</p>
                 <div class="d-flex align-items-center justify-content-between">
                     <p class="card-text"><strong>Created At:</strong> {{ payment.createdAt | date }}</p>
                     <button class="btn" *ngIf="payment.status === 'Pending'"
