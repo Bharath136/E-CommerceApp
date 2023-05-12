@@ -33,7 +33,8 @@ export class MyCartComponent {
     this.isLoading = true
     this.http.delete(`http://localhost:5100/remove-from-cart/${id}`).subscribe((res) => {
       window.alert('Item removed from cart.')
-      this.http.get<any[]>('http://localhost:5100/cart').subscribe(data => {
+      const userId = localStorage.getItem('userId')
+      this.http.get<any[]>(`http://localhost:5100/cart/${userId}`).subscribe(data => {
         this.cartList = data;
         this.isLoading = false
       });

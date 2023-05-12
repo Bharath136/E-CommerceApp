@@ -49,7 +49,6 @@ export class DashboardComponent {
 
     this.http.get<any[]>('http://localhost:5100/orders').subscribe((data)=>{
       this.ordersList = data
-      console.log(this.ordersList)
     })
 
     this.http.get<any[]>('http://localhost:5100/users').subscribe((data)=>{

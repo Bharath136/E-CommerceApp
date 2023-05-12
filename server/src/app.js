@@ -26,8 +26,6 @@ function adminAuthenticateToken(req, res, next) {
     });
 }
 
-
-
 // user middleware
 const userAuthenticateToken = async (req, res, next) => {
     try {
@@ -47,7 +45,6 @@ const userAuthenticateToken = async (req, res, next) => {
         res.send('Server Error');
     }
 };
-
 
 
 // Add a new category to the database
@@ -85,20 +82,6 @@ app.post('/add-category', async (req, res) => {
     }
 });
 
-
-
-
-app.delete('/delete-all-categories', async (req, res) => {
-    try {
-        await models.Category.deleteMany({});
-        res.status(200).json({ message: 'All categories deleted successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
-    }
-});
-
-
 app.get('/api/categories', async (req, res) => {
     try {
         const cotegoriesList = await models.Category.find();
@@ -108,7 +91,6 @@ app.get('/api/categories', async (req, res) => {
         console.log(error);
     }
 })
-
 
 
 // Add a new product to the database and associate it with an existing category
@@ -177,21 +159,6 @@ app.delete('/remove-from-cart/:id', async (req, res) => {
 
 
 
-
-
-
-app.delete('/cart-items', async (req, res) => {
-    try {
-        await models.AddToCart.deleteMany({});
-        res.send('All cart items deleted');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal server error');
-    }
-});
-
-
-
 app.get('/cart/:id', async (req, res) => {
     try {
         const cartItems = await models.AddToCart.find({ userId: req.params.id });
@@ -203,8 +170,6 @@ app.get('/cart/:id', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
-
 
 
 app.post('/orders', async (req, res) => {
@@ -351,10 +316,6 @@ app.put('/cancel-order/:id', async (req, res) => {
 });
 
 
-
-
-
-
 app.get('/orders/:id', async (req, res) => {
     try {
         const order = await models.Order.findById(req.params.id);
@@ -366,6 +327,7 @@ app.get('/orders/:id', async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // POST /payments
 app.post('/payments', async (req, res) => {
@@ -415,8 +377,7 @@ app.put('/payment/:id', async (req, res) => {
     }
 });
 
-
-// // feedback schema
+// feedback schema
 
 // Create feedback from user
 app.post('/feedback', async (req, res) => {
@@ -443,25 +404,15 @@ app.get('/feedback', async (req, res) => {
 
 
 
-// // admin schema
-
+// admin schema
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
-    // Find the user by email in the database
     const user = await models.Users.findOne({ email });
-
-    // If the user doesn't exist, return an error
     if (!user) {
         return res.status(401).json({ message: 'Invalid email or password' });
     }
-
     const isAdmin = email == 'virat@gmail.com' && password == 'virat@1234';
-
-    // Compare the password with the hashed password in the database
     const isMatch = await bcrypt.compare(password, user.password);
-
-    // If the password doesn't match, return an error
     if (!isMatch) {
         return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -474,14 +425,7 @@ app.post('/login', async (req, res) => {
         const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey');
         res.json({ user, jwtToken });
     }
-
-
-    // Return the token
-
 });
-
-
-
 
 // user schema
 app.post('/register', async (req, res) => {
@@ -515,40 +459,7 @@ app.post('/register', async (req, res) => {
 });
 
 
-
-
-
-
-// user login schema
-
-app.post('/api/user/login', async (request, response) => {
-    try {
-        const { email, password } = request.body;
-        const user = await models.Users.findOne({ email });
-
-        if (!user) {
-            response.status(404).send("User not found");
-        } else {
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (isMatch) {
-                const payload = {
-                    email: email,
-                };
-                const jwtToken = jwt.sign(payload, "USER_SECRET_TOKEN");
-                response.send({ jwtToken });
-            } else {
-                response.status(401).send('Invalid password');
-            }
-        }
-    } catch (error) {
-        response.status(500).send('Server error');
-        console.log(error);
-    }
-});
-
-
 // get users
-
 app.get('/users', async (req, res) => {
     try {
         const users = await models.Users.find();
@@ -556,22 +467,6 @@ app.get('/users', async (req, res) => {
     } catch (error) {
         res.status(500).send('Server error');
         console.log(error);
-    }
-});
-
-
-app.delete('/api/user/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const deletedUser = await models.Users.findById({ id });
-        if (deletedUser) {
-            res.send(`User ${username} deleted`);
-        } else {
-            res.status(404).send(`User ${username} not found`);
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Server error');
     }
 });
 
@@ -622,6 +517,7 @@ app.delete('/products/:id', async (req, res) => {
     }
 });
 
+
 app.put('/products/:id', async (req, res) => {
     try {
         const updatedProduct = await models.Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -634,10 +530,6 @@ app.put('/products/:id', async (req, res) => {
         res.status(500).json({ message: `Error updating product with id ${req.params.id}` });
     }
 });
-
-
-
-
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

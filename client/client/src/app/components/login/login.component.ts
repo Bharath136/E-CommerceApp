@@ -45,7 +45,7 @@ export class LoginComponent {
       },
       (error) => {
         console.error(error);
-        window.alert('Login failed!');
+        window.alert('Login failed! Email or Password is wrong');
       }
     );
   }

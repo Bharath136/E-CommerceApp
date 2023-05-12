@@ -8,10 +8,6 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true }
 });
 
-const adminSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-});
 
 // category schema
 const categorySchema = new mongoose.Schema({
@@ -76,7 +72,6 @@ const feedbackSchema = new mongoose.Schema({
 
 const models = {
     Users: mongoose.model('User', userSchema),
-    Admin: mongoose.model('Admin', adminSchema),
     Category: mongoose.model('Category', categorySchema),
     Product: mongoose.model('Product', productSchema),
     AddToCart: mongoose.model('AddToCart', addToCartSchema),
