@@ -17,6 +17,7 @@
         <div class="mb-2" *ngFor="let item of myOrdersList">
             <div class="card-body card" *ngIf="item.status !== 'Delivered'">
                 <p class="card-text"><strong>Name:</strong> {{ item.firstname }}</p>
+                <p class="card-text"><strong>Product Name:</strong> {{ item.productName }}</p>
                 <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }}</p>
                 <p class="card-text"><strong>Total Price:</strong> {{ item.price }}</p>
                 <p class="card-text"><strong>Payment Method:</strong> {{ item.paymentMethod }}</p>

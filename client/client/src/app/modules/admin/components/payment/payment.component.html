@@ -31,6 +31,7 @@
         <div class="card mb-2" *ngFor="let payment of data">
             <div class="card-body">
                 <h5 class="card-title"><strong>Payment ID:</strong> {{ payment._id }}</h5>
+                <p class="card-text"><strong>Customer Name:</strong> {{ payment.name }}</p>
                 <p class="card-text"><strong>UserId:</strong> {{ payment.user }}</p>
                 <p class="card-text"><strong>Order:</strong> {{ payment.order }}</p>
                 <p class="card-text"><strong>Amount:</strong> {{ payment.amount }} /-</p>

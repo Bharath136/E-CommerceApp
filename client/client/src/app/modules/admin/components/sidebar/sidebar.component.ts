@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faBars, faTachometerAlt, faShoppingBag, faShoppingCart, faTags, faMoneyBill,faComment } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTachometerAlt, faShoppingBag, faShoppingCart, faTags, faMoneyBill,faComment,faUsers } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +15,11 @@ export class SidebarComponent {
       path: '/admin/dashboard',
       icon: faTachometerAlt,
       name: 'Dashboard'
+    },
+    {
+      path: '/admin/users',
+      icon: faUsers,
+      name: 'Users'
     },
     {
       path: '/admin/products',

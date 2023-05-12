@@ -21,7 +21,7 @@ export class RegisterComponent {
     })
     const jwtToken = localStorage.getItem('adminJwtToken')
     if (jwtToken){
-      this.route.navigate(['/admin/home'])
+      this.route.navigate(['/admin/dashboard'])
     }
     const token = localStorage.getItem("jwtToken")
     if (token) {

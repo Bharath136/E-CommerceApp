@@ -148,8 +148,8 @@ app.post('/add-products', async (req, res) => {
 
 // Endpoint for adding an item to the cart
 app.post('/add-to-cart', async (req, res) => {
-    const { productId, quantity = 1 } = req.body;
-    const item = new models.AddToCart({ productId, quantity });
+    const {userId, productId, productName, quantity = 1 } = req.body;
+    const item = new models.AddToCart({userId, productId,productName, quantity });
     try {
         await item.save();
         res.status(200).json({ message: `Added ${quantity} of product ${productId} to cart` });
@@ -192,9 +192,9 @@ app.delete('/cart-items', async (req, res) => {
 
 
 
-app.get('/cart', async (req, res) => {
+app.get('/cart/:id', async (req, res) => {
     try {
-        const cartItems = await models.AddToCart.find();
+        const cartItems = await models.AddToCart.find({ userId: req.params.id });
         const productIds = cartItems.map(item => item.productId);
         const products = await models.Product.find({ _id: { $in: productIds } });
         res.send(products);
@@ -203,6 +203,7 @@ app.get('/cart', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
+
 
 
 
@@ -219,6 +220,7 @@ app.post('/orders', async (req, res) => {
             price: amount,
             phone,
             productId,
+            productName:product.productname,
             quantity,
             paymentMethod,
             address
@@ -228,6 +230,7 @@ app.post('/orders', async (req, res) => {
         // Update payment with order details
         const payment = new models.Payment({
             user,
+            name:firstname+ " " +lastname,
             order: newOrder._id, // Associate the order with the payment
             amount,
             deliveryStatus: newOrder.status,
@@ -281,25 +284,6 @@ app.get('/my-orders/:id', async (req, res) => {
 });
 
 
-// Manage order (admin only)
-// app.put('/orders/:id', async (req, res) => {
-//     try {
-//       const orderId = req.params.id;
-//       const { status } = req.body;
-
-//       const order = await models.Order.findById(orderId);
-//       if (!order) {
-//         return res.status(404).send('Order not found');
-//       }
-
-//       order.status = status; // Update the status property  
-//       const updatedOrder = await order.save();
-//       res.send(updatedOrder);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).send('Server error');
-//     }
-//   });
 app.put('/orders/:id', async (req, res) => {
     try {
         const orderId = req.params.id;
@@ -311,14 +295,19 @@ app.put('/orders/:id', async (req, res) => {
         }
 
         order.status = status; // Update the order status property
-        console.log(orderId)
+        order.createdAt = Date.now()
         const payment = await models.Payment.findOne({ order: orderId });
         if (!payment) {
             return res.status(404).send('Payment not found');
         }
 
         payment.deliveryStatus = status; // Update the payment status property
-        payment.status = 'Success'
+        if(status === 'Delivered'){
+            payment.status = 'Success'
+        }else{
+            payment.status = "Pending"
+        }
+        payment.createdAt = Date.now()
 
         await payment.save();
         const updatedOrder = await order.save();
@@ -336,12 +325,12 @@ app.put('/cancel-order/:id', async (req, res) => {
         const { status } = req.body;
 
         const order = await models.Order.findById(orderId);
+        console.log(order)
         if (!order) {
             return res.status(404).send('Order not found');
         }
 
-        order.status = status; // Update the order status property
-        console.log(orderId)
+        order.status = status; 
         const payment = await models.Payment.findOne({ order: orderId });
         if (!payment) {
             return res.status(404).send('Payment not found');
@@ -349,6 +338,8 @@ app.put('/cancel-order/:id', async (req, res) => {
 
         payment.deliveryStatus = status;
         payment.status = "Failed"
+        payment.createdAt = Date.now()
+        
 
         await payment.save();
         const updatedOrder = await order.save();
@@ -450,27 +441,6 @@ app.get('/feedback', async (req, res) => {
     }
 });
 
-
-// admin register schema
-app.post('/api/register', async (request, response) => {
-    try {
-        const { username, password } = request.body;
-        const adminExists = await models.Admin.findOne({ username });
-
-        if (adminExists) {
-            response.status(409).send("Admin already exists");
-        } else {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            const admin = new models.Admin({ username, password: hashedPassword });
-            await admin.save();
-            response.status(201).send('Admin registration successful');
-        }
-    } catch (error) {
-        response.status(500).send('Server error');
-        console.log(error);
-    }
-});
 
 
 // // admin schema

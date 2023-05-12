@@ -21,6 +21,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PaymentComponent } from './components/payment/payment.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UsersComponent } from './components/users/users.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     LoaderSpinnerComponent,
     SidebarComponent,
     DashboardComponent,
-    PaymentComponent
+    PaymentComponent,
+    UsersComponent
   ],
   imports: [
     CommonModule,

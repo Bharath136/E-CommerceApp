@@ -63,13 +63,14 @@ export class LandingPageComponent {
   onAddToCart(productId: string): void {
     const token = localStorage.getItem("jwtToken")
     const jwtToken = localStorage.getItem('adminJwtToken')
+    const userId = localStorage.getItem('userId')
     if (jwtToken) {
       this.route.navigate(['/admin/home'])
     } if (!token) {
       window.alert("You can't Access this! because your not an loggedin user!")
       this.route.navigate(['/login'])
     } else {
-      this.http.post('http://localhost:5100/add-to-cart', { productId }).subscribe(
+      this.http.post('http://localhost:5100/add-to-cart', {userId, productId}).subscribe(
         (response) => {
           window.alert('Product added to cart!');
         },

@@ -13,7 +13,8 @@ export class MyCartComponent {
 
   constructor(private http: HttpClient, private route: Router) {
     this.isLoading = true
-    this.http.get<any[]>('http://localhost:5100/cart').subscribe(data => {
+    const userId = localStorage.getItem('userId')
+    this.http.get<any[]>(`http://localhost:5100/cart/${userId}`).subscribe(data => {
       this.cartList = data;
       this.isLoading = false
     });

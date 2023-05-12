@@ -19,6 +19,12 @@ export class OrdersComponent {
   statusForm: FormGroup;
 
   constructor(private http: HttpClient, private route: Router,private modalService: NgbModal) {
+
+    // Email Message to Customer //
+
+    
+
+    // Email Message to Customer //
     this.isLoading = true;
     this.http.get<any[]>('http://localhost:5100/orders').subscribe(data => {
       this.data = data;
