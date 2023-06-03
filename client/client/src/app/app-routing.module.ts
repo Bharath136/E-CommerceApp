@@ -14,50 +14,53 @@ import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
-    path:'register',
-    component:RegisterComponent
+    path: 'register',
+    component: RegisterComponent
   },
   {
-    path:'login',
-    component:LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path:'', redirectTo: '/home',pathMatch:'full',
-  },
-  { path: 'home', component:HomeComponent},
-  {
-    path:'shopping',
-    component:LandingPageComponent
+    path: 'shopping',
+    component: LandingPageComponent
   },
   {
-    path:'my-cart',
-    component:MyCartComponent
+    path: 'home',
+    component: HomeComponent
   },
   {
-    path:'product-details/:id',
-    component:ProductDetailsComponent
+    path: '', redirectTo: '/home', pathMatch: 'full',
   },
   {
-    path:'place-order/:id',
-    component:PlaceOrderComponent
+    path: 'my-cart',
+    component: MyCartComponent
   },
   {
-    path:'feedback',
-    component:FeedbackComponent
+    path: 'product-details/:id',
+    component: ProductDetailsComponent
   },
   {
-    path:'my-orders',
-    component:MyOrdersComponent
+    path: 'place-order/:id',
+    component: PlaceOrderComponent
   },
   {
-    path:'history',
-    component:HistoryComponent
+    path: 'feedback',
+    component: FeedbackComponent
   },
   {
-    path:'admin',loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule)
+    path: 'my-orders',
+    component: MyOrdersComponent
   },
   {
-    path:'**', component:NotFoundComponent
+    path: 'history',
+    component: HistoryComponent
+  },
+  {
+    path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule)
+  },
+  {
+    path: '**', component: NotFoundComponent
   }
 ];
 
