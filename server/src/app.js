@@ -47,34 +47,23 @@ const userAuthenticateToken = async (req, res, next) => {
 };
 
 
-// Add a new category to the database
 // API endpoint to add a category
 app.post('/add-category', async (req, res) => {
     try {
         const { category, description } = req.body;
-
-        // Validate inputs
         if (!category) {
             return res.status(400).send('Category and description are required');
         }
-
-        // Check if category already exists
         const existingCategory = await models.Category.findOne({ category });
         if (existingCategory) {
             return res.status(400).send('Category already exists');
         }
-
-        // Create a new category object
         const newCategory = new models.Category({
             category,
             description
         });
-
-        // Save the new category to the database
         const savedCategory = await newCategory.save();
         console.log(savedCategory, 'category created');
-
-        // Return success response
         return res.status(200).send(savedCategory);
     } catch (error) {
         console.log(error);
@@ -176,7 +165,6 @@ app.post('/orders', async (req, res) => {
     const { firstname, lastname, user, phone, productId, quantity, paymentMethod, address } = req.body;
     const product = await models.Product.findById(productId);
     const amount = product.price * quantity;
-
     try {
         const order = new models.Order({
             firstname,
@@ -190,9 +178,7 @@ app.post('/orders', async (req, res) => {
             paymentMethod,
             address
         });
-
         const newOrder = await order.save();
-        // Update payment with order details
         const payment = new models.Payment({
             user,
             name:firstname+ " " +lastname,
@@ -233,7 +219,6 @@ app.get('/orders', async (req, res) => {
     }
 });
 
-
 // Define a route for fetching orders by user ID
 app.get('/my-orders/:id', async (req, res) => {
     const userId = req.params.id;
@@ -247,7 +232,6 @@ app.get('/my-orders/:id', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
 
 app.put('/orders/:id', async (req, res) => {
     try {
@@ -401,8 +385,6 @@ app.get('/feedback', async (req, res) => {
         console.log(error);
     }
 });
-
-
 
 // admin schema
 app.post('/login', async (req, res) => {

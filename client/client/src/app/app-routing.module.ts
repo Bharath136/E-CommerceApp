@@ -10,6 +10,7 @@ import { PlaceOrderComponent } from './components/place-order/place-order.compon
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { HistoryComponent } from './components/history/history.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
@@ -23,8 +24,9 @@ const routes: Routes = [
   {
     path:'', redirectTo: '/home',pathMatch:'full',
   },
+  { path: 'home', component:HomeComponent},
   {
-    path:'home',
+    path:'shopping',
     component:LandingPageComponent
   },
   {

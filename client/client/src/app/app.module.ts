@@ -20,6 +20,8 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
 import { LoaderSpinnerComponent } from './components/loader-spinner/loader-spinner.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { HistoryComponent } from './components/history/history.component';
+import { HomeComponent } from './components/home/home.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { HistoryComponent } from './components/history/history.component';
     FeedbackComponent,
     LoaderSpinnerComponent,
     MyOrdersComponent,
-    HistoryComponent
+    HistoryComponent,
+    HomeComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
